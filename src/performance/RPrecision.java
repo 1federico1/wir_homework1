@@ -1,4 +1,4 @@
-package query;
+package performance;
 
 import data.ReadFile;
 
@@ -18,15 +18,15 @@ public class RPrecision {
     }
 
     /**
-     * Computes the R-precision for a single query, compared with the Ground Truth (relevant documents) query results.
+     * Computes the R-precision for a single performance, compared with the Ground Truth (relevant documents) performance results.
      * @param pathToGroundTruth
      * @param pathToQueryFile
      * @param queryId
      * @return the value of the R-precision
      */
     public double computeRPrecisionForSingleQuery(String pathToGroundTruth, String pathToQueryFile, int queryId) {
-        Map<Integer, List<Integer>> groundTruth = rf.getQuery2relevantDoc(pathToGroundTruth);
-        Map<Integer, List<Integer>> query = rf.getQuery2relevantDoc(pathToQueryFile);
+        Map<Integer, List<Integer>> groundTruth = rf.getQueryIdRetrievedDocuments(pathToGroundTruth);
+        Map<Integer, List<Integer>> query = rf.getQueryIdRetrievedDocuments(pathToQueryFile);
         List<Integer> groundTruthQuery = groundTruth.get(queryId);
         int numberOfRelevantDocuments = groundTruthQuery.size();
         List<Integer> retrievedDocuments = query.get(queryId);
@@ -51,14 +51,14 @@ public class RPrecision {
 
     /**
      * Computes the R-precision for all the queries in the file passed as parameter, compared with the Ground Truth
-     * query results.
+     * performance results.
      * @param pathToGroundTruth
      * @param pathToQueryFile
      * @return the average of all the R-precisions computed among the retrieved documents.
      */
     public double averageRPrecision(String pathToGroundTruth, String pathToQueryFile) {
         ReadFile rf = new ReadFile();
-        Map<Integer, List<Integer>> groundTruth = rf.getQuery2relevantDoc(pathToGroundTruth);
+        Map<Integer, List<Integer>> groundTruth = rf.getQueryIdRetrievedDocuments(pathToGroundTruth);
         double count = 0.0;
         for (int queryId : groundTruth.keySet()) {
             count += this.computeRPrecisionForSingleQuery(pathToGroundTruth, pathToQueryFile, queryId);
