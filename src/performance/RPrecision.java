@@ -10,7 +10,7 @@ import java.util.Map;
  * documents returned.
  * <p>
  */
-public class RPrecision implements Query {
+public class RPrecision extends Query {
     private ReadFile rf;
 
     public RPrecision() {
@@ -31,27 +31,27 @@ public class RPrecision implements Query {
         Map<Integer, List<Integer>> query = rf.getQueryIdRetrievedDocuments(pathToQueryFile);
         System.out.println(groundTruth);
         System.out.println(query);
-        List<Integer> groundTruthQuery = groundTruth.get(queryId);
-        int numberOfRelevantDocuments = groundTruthQuery.size();
+        List<Integer> relevantDocuments = groundTruth.get(queryId);
+        int numberOfRelevantDocuments = relevantDocuments.size();
         List<Integer> retrievedDocuments = query.get(queryId);
         /*
         Cutoff the list of returned documents at the position indicated by the size of the relevant documents set.
          */
         retrievedDocuments = retrievedDocuments.subList(0, numberOfRelevantDocuments);
-        int numberOfRetrievedDocuments = 0;
+
         /*
         For each retrieved document check if it is present in the relevant document set
          */
+        int numberOfRetrievedDocuments = 0;
         for (int docId : retrievedDocuments) {
-            if (groundTruthQuery.contains(docId)) {
-                numberOfRetrievedDocuments++;
-            }
+            numberOfRetrievedDocuments += relevance(docId, relevantDocuments);
         }
-        if (numberOfRelevantDocuments == 0.0) {
+        if (numberOfRelevantDocuments == 0) {
             return 0.0;
         } else
             return (double) numberOfRetrievedDocuments / (double) numberOfRelevantDocuments;
     }
+
 
     /**
      * Computes the R-precision for all the queries in the file passed as parameter, compared with the Ground Truth

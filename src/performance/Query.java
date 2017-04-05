@@ -1,11 +1,23 @@
 package performance;
 
+import java.util.List;
+
 /**
  * Created by federico on 4/3/17.
  */
-public interface Query {
+public abstract class Query {
 
-    double computeSingleQuery(String pathToGroundTruth, String pathToQueryFile, int queryId);
+    public abstract double computeSingleQuery(String pathToGroundTruth, String pathToQueryFile, int queryId);
 
-    double computeAll(String pathToGroundTruth, String pathToQueryFile);
+    public abstract double computeAll(String pathToGroundTruth, String pathToQueryFile);
+
+    public int relevance(int docId, List<Integer> relevantDocuments) {
+        if (relevantDocuments.contains(docId)) {
+            return 1;
+        }
+        return 0;
+    }
+
+
+
 }
