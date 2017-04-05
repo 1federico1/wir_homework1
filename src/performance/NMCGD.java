@@ -13,9 +13,8 @@ public class NMCGD extends Query {
     public NMCGD (){
         rf = new ReadFile();
     }
-    @Override
-    public double computeSingleQuery(String pathToGroundTruth, String pathToQueryFile, int queryId) {
-        int k = 3; //esempio
+
+    public double computeSingleQuery(String pathToGroundTruth, String pathToQueryFile, int queryId, int k) {
         Map<Integer, List<Integer>> query2relevantDocuments = rf.getQueryIdRetrievedDocuments(pathToGroundTruth);
         Map<Integer, List<Integer>> query2retrievedDocuments = rf.getQueryIdRetrievedDocuments(pathToQueryFile);
         List<Integer> relevantDocuments = query2relevantDocuments.get(queryId);
@@ -33,7 +32,6 @@ public class NMCGD extends Query {
 
     }
 
-    @Override
     public double computeAll(String pathToGroundTruth, String pathToQueryFile) {
         return 0;
     }

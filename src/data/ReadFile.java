@@ -1,6 +1,7 @@
 package data;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -70,5 +71,33 @@ public class ReadFile {
         } else {
             map.put(queryId, new ArrayList<>(relevantDocId));
         }
+    }
+
+    /**
+     * All files are named in the same way, this method returns all the files in the stemmer folder that start with the
+     * nameToSearch parameter (usually the naming convention is 'output_scorerFunctionFieldWhereIsApplied.tsv)
+     * @param pathToStemmer
+     * @param nameToSearch
+     * @return
+     */
+    public List<String> getQueryFiles(String pathToStemmer, String nameToSearch) {
+        List<String> result = new ArrayList<>();
+        File[] files = new File(pathToStemmer).listFiles();
+        for(File file : files) {
+            if(file.getName().contains(nameToSearch)) {
+                result.add(file.getAbsolutePath());
+            }
+        }
+        return result;
+    }
+
+    public String getRelevantDocumentsQueryPath(String pathToStemmer, String grounTruthFileName) {
+        File[] files = new File(pathToStemmer).listFiles();
+        for(File file : files) {
+            if(file.getName().contains(grounTruthFileName)) {
+                return file.getAbsolutePath();
+            }
+        }
+        return null;
     }
 }

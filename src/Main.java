@@ -1,6 +1,6 @@
 import performance.RPrecision;
 
-import java.nio.file.DirectoryStream;
+import java.io.File;
 
 /**
  * Created by federico on 4/1/17.
@@ -20,23 +20,20 @@ public class Main {
     private static final String BM25_TEXT_DEFAULT = PATH_DEFAULT_STEMMER + "output_bm25text_default.tsv";
     private static final String BM25_TITLE_DEFAULT = PATH_DEFAULT_STEMMER + "output_bm25title_default.tsv";
 
-    public void getFilesInDir(String pathToDir) {
+    public static void getFilesInDir() {
+        File[] files = new File(PATH_DEFAULT_STEMMER).listFiles();
+        for(File file : files) {
+            System.out.println(file.getName());
+        }
+
         String filename = "output";
     }
 
     public static void main(String[] args) {
         RPrecision rp = new RPrecision();
-        System.out.println(rp.computeAll(PATH_TO_GROUND_TRUTH, COUNTSCORER_TEXT_AND_TITLE_DEFAULT));
-        System.out.println(rp.computeAll(PATH_TO_GROUND_TRUTH, COUNTSCORER_TEXT_DEFAULT));
-        System.out.println(rp.computeAll(PATH_TO_GROUND_TRUTH, COUNTSCORER_TITLE_DEFAULT));
-        System.out.println(rp.computeAll(PATH_TO_GROUND_TRUTH, TFIDF_TEXT_AND_TITLE_DEFAULT));
-        System.out.println(rp.computeAll(PATH_TO_GROUND_TRUTH, TFIDF_TEXT_DEFAULT));
-        System.out.println(rp.computeAll(PATH_TO_GROUND_TRUTH, TFIDF_TITLE_DEFAULT));
-        System.out.println(rp.computeAll(PATH_TO_GROUND_TRUTH, BM25_TEXT_AND_TITLE_DEFAULT));
-        System.out.println(rp.computeAll(PATH_TO_GROUND_TRUTH, BM25_TEXT_DEFAULT));
-        System.out.println(rp.computeAll(PATH_TO_GROUND_TRUTH, BM25_TITLE_DEFAULT));
-
-
+        for(double d : rp.computeAll(PATH_DEFAULT_STEMMER)) {
+            System.out.println(d);
+        }
 
     }
 }

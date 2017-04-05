@@ -7,10 +7,6 @@ import java.util.List;
  */
 public abstract class Query {
 
-    public abstract double computeSingleQuery(String pathToGroundTruth, String pathToQueryFile, int queryId);
-
-    public abstract double computeAll(String pathToGroundTruth, String pathToQueryFile);
-
     public int relevance(int docId, List<Integer> relevantDocuments) {
         if (relevantDocuments.contains(docId)) {
             return 1;
