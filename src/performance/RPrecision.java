@@ -10,7 +10,7 @@ import java.util.Map;
  * documents returned.
  * <p>
  */
-public class RPrecision {
+public class RPrecision implements Query {
     private ReadFile rf;
 
     public RPrecision() {
@@ -19,14 +19,18 @@ public class RPrecision {
 
     /**
      * Computes the R-precision for a single performance, compared with the Ground Truth (relevant documents) performance results.
+     *
      * @param pathToGroundTruth
      * @param pathToQueryFile
      * @param queryId
      * @return the value of the R-precision
      */
-    public double computeRPrecisionForSingleQuery(String pathToGroundTruth, String pathToQueryFile, int queryId) {
+    @Override
+    public double computeSingleQuery(String pathToGroundTruth, String pathToQueryFile, int queryId) {
         Map<Integer, List<Integer>> groundTruth = rf.getQueryIdRetrievedDocuments(pathToGroundTruth);
         Map<Integer, List<Integer>> query = rf.getQueryIdRetrievedDocuments(pathToQueryFile);
+        System.out.println(groundTruth);
+        System.out.println(query);
         List<Integer> groundTruthQuery = groundTruth.get(queryId);
         int numberOfRelevantDocuments = groundTruthQuery.size();
         List<Integer> retrievedDocuments = query.get(queryId);
@@ -46,22 +50,24 @@ public class RPrecision {
         if (numberOfRelevantDocuments == 0.0) {
             return 0.0;
         } else
-            return (double)numberOfRetrievedDocuments / (double)numberOfRelevantDocuments;
+            return (double) numberOfRetrievedDocuments / (double) numberOfRelevantDocuments;
     }
 
     /**
      * Computes the R-precision for all the queries in the file passed as parameter, compared with the Ground Truth
      * performance results.
+     *
      * @param pathToGroundTruth
      * @param pathToQueryFile
      * @return the average of all the R-precisions computed among the retrieved documents.
      */
-    public double averageRPrecision(String pathToGroundTruth, String pathToQueryFile) {
+    @Override
+    public double computeAll(String pathToGroundTruth, String pathToQueryFile) {
         ReadFile rf = new ReadFile();
         Map<Integer, List<Integer>> groundTruth = rf.getQueryIdRetrievedDocuments(pathToGroundTruth);
         double count = 0.0;
         for (int queryId : groundTruth.keySet()) {
-            count += this.computeRPrecisionForSingleQuery(pathToGroundTruth, pathToQueryFile, queryId);
+            count += this.computeSingleQuery(pathToGroundTruth, pathToQueryFile, queryId);
         }
         return count / (double) groundTruth.keySet().size();
     }
