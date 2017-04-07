@@ -1,3 +1,4 @@
+import performance.NMCGD;
 import performance.RPrecision;
 
 import java.io.File;
@@ -9,31 +10,23 @@ public class Main {
 
     private static final String PATH_DEFAULT_STEMMER = "/home/federico/Dropbox/intellij/wir_homework1/" +
             "Cranfield_DATASET/default/";
-    private static final String PATH_TO_GROUND_TRUTH = PATH_DEFAULT_STEMMER + "cran_Ground_Truth.tsv";
-    private static final String COUNTSCORER_TEXT_AND_TITLE_DEFAULT = PATH_DEFAULT_STEMMER + "output_cstt_default.tsv";
-    private static final String COUNTSCORER_TEXT_DEFAULT = PATH_DEFAULT_STEMMER + "output_cstext_default.tsv";
-    private static final String COUNTSCORER_TITLE_DEFAULT = PATH_DEFAULT_STEMMER + "output_cstitle_default.tsv";
-    private static final String TFIDF_TEXT_AND_TITLE_DEFAULT = PATH_DEFAULT_STEMMER + "output_tfidftt_default.tsv";
-    private static final String TFIDF_TEXT_DEFAULT = PATH_DEFAULT_STEMMER + "output_tfidftext_default.tsv";
-    private static final String TFIDF_TITLE_DEFAULT = PATH_DEFAULT_STEMMER + "output_tfidftitle_default.tsv";
-    private static final String BM25_TEXT_AND_TITLE_DEFAULT = PATH_DEFAULT_STEMMER + "output_bm25tt_default.tsv";
-    private static final String BM25_TEXT_DEFAULT = PATH_DEFAULT_STEMMER + "output_bm25text_default.tsv";
-    private static final String BM25_TITLE_DEFAULT = PATH_DEFAULT_STEMMER + "output_bm25title_default.tsv";
-
-    public static void getFilesInDir() {
-        File[] files = new File(PATH_DEFAULT_STEMMER).listFiles();
-        for(File file : files) {
-            System.out.println(file.getName());
-        }
-
-        String filename = "output";
-    }
+    private static final String PATH_ENGLISH_STEMMER = "/home/federico/Dropbox/intellij/wir_homework1/" +
+            "Cranfield_DATASET/stemmer";
+    private static final String PATH_STOPWORD_STEMMER = "/home/federico/Dropbox/intellij/wir_homework1/" +
+            "Cranfield_DATASET/stopword_stemmer";
 
     public static void main(String[] args) {
+        System.out.println(PATH_DEFAULT_STEMMER);
+        NMCGD nmcgd = new NMCGD();
+        nmcgd.getResults(PATH_DEFAULT_STEMMER,1,3,5,10);
         RPrecision rp = new RPrecision();
-        for(double d : rp.computeAll(PATH_DEFAULT_STEMMER)) {
-            System.out.println(d);
-        }
+        rp.computeAll(PATH_DEFAULT_STEMMER);
+        System.out.println(PATH_ENGLISH_STEMMER);
+        nmcgd.getResults(PATH_ENGLISH_STEMMER,1,3,5,10);
+        rp.computeAll(PATH_ENGLISH_STEMMER);
+        System.out.println(PATH_STOPWORD_STEMMER);
+        nmcgd.getResults(PATH_STOPWORD_STEMMER,1,3,5,10);
+        rp.computeAll(PATH_STOPWORD_STEMMER);
 
     }
 }

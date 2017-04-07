@@ -73,28 +73,29 @@ public class ReadFile {
         }
     }
 
+
+
     /**
      * All files are named in the same way, this method returns all the files in the stemmer folder that start with the
      * nameToSearch parameter (usually the naming convention is 'output_scorerFunctionFieldWhereIsApplied.tsv)
      * @param pathToStemmer
-     * @param nameToSearch
      * @return
      */
-    public List<String> getQueryFiles(String pathToStemmer, String nameToSearch) {
+    public List<String> getQueryFiles(String pathToStemmer) {
         List<String> result = new ArrayList<>();
         File[] files = new File(pathToStemmer).listFiles();
         for(File file : files) {
-            if(file.getName().contains(nameToSearch)) {
+            if(file.getName().contains("output")) {
                 result.add(file.getAbsolutePath());
             }
         }
         return result;
     }
 
-    public String getRelevantDocumentsQueryPath(String pathToStemmer, String grounTruthFileName) {
+    public String getRelevantDocumentsQueryPath(String pathToStemmer) {
         File[] files = new File(pathToStemmer).listFiles();
         for(File file : files) {
-            if(file.getName().contains(grounTruthFileName)) {
+            if(file.getName().contains("Ground_Truth")) {
                 return file.getAbsolutePath();
             }
         }

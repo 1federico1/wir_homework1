@@ -16,7 +16,8 @@ public class RPrecision extends Query {
     private ReadFile rf;
     private static final String PATH_TO_GROUND_TRUTH = "/home/federico/Dropbox/intellij/wir_homework1/" +
             "Cranfield_DATASET/default/cran_Ground_Truth.tsv";
-    Map<Integer, List<Integer>> query2relevantDocuments;
+    private Map<Integer, List<Integer>> query2relevantDocuments;
+    private static final Logger LOGGER = Logger.getLogger(RPrecision.class.getName());
 
 
     public RPrecision() {
@@ -32,7 +33,7 @@ public class RPrecision extends Query {
      * @param queryId
      * @return the value of the R-precision
      */
-    public double computeSingleQuery(String pathToGroundTruth, String pathToQueryFile, int queryId) {
+    private double computeSingleQuery(String pathToGroundTruth, String pathToQueryFile, int queryId) {
         Map<Integer, List<Integer>> query2retrievedDocuments = rf.getQueryIdRetrievedDocuments(pathToQueryFile);
         List<Integer> relevantDocuments = query2relevantDocuments.get(queryId);
         int numberOfRelevantDocuments = relevantDocuments.size();
@@ -64,13 +65,12 @@ public class RPrecision extends Query {
      * @param pathToQueryFile
      * @return the average of all the R-precisions computed among the retrieved documents.
      */
-    public double averageRPrecision(String pathToGroundTruth, String pathToQueryFile) {
-        Map<Integer, List<Integer>> groundTruth = rf.getQueryIdRetrievedDocuments(pathToGroundTruth);
+    private double averageRPrecision(String pathToGroundTruth, String pathToQueryFile) {
         double count = 0.0;
-        for (int queryId : groundTruth.keySet()) {
+        for (int queryId : query2relevantDocuments.keySet()) {
             count += this.computeSingleQuery(pathToGroundTruth, pathToQueryFile, queryId);
         }
-        return count / (double) groundTruth.keySet().size();
+        return count / (double) query2relevantDocuments.keySet().size();
     }
 
     /**
@@ -81,10 +81,11 @@ public class RPrecision extends Query {
      */
     public List<Double> computeAll(String pathToStemmer) {
         List<Double> results = new ArrayList<>();
-        String relevantDocumentsFileName = this.rf.getRelevantDocumentsQueryPath(pathToStemmer, "Ground_Truth");
-        for(String fileName : this.rf.getQueryFiles(pathToStemmer, "output")) {
-            Logger.getAnonymousLogger().info("Computing R-Precision of"+fileName);
-            results.add(this.averageRPrecision(relevantDocumentsFileName,fileName));
+        String relevantDocumentsFileName = this.rf.getRelevantDocumentsQueryPath(pathToStemmer);
+        for(String fileName : this.rf.getQueryFiles(pathToStemmer)) {
+            double rprecision = this.averageRPrecision(relevantDocumentsFileName, fileName);
+            LOGGER.info("Computing R-Precision of"+fileName+": "+rprecision);
+            results.add(rprecision);
         }
         return results;
     }
