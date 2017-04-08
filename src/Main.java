@@ -16,17 +16,17 @@ public class Main {
             "Cranfield_DATASET/stopword_stemmer";
 
     public static void main(String[] args) {
-        System.out.println(PATH_DEFAULT_STEMMER);
+        System.out.println("DEFAULT STEMMER");
         NMCGD nmcgd = new NMCGD();
-        nmcgd.getResults(PATH_DEFAULT_STEMMER,1,3,5,10);
+      //  nmcgd.getResults(PATH_DEFAULT_STEMMER,1,3,5,10);
         RPrecision rp = new RPrecision();
-        rp.computeAll(PATH_DEFAULT_STEMMER);
-        System.out.println(PATH_ENGLISH_STEMMER);
-        nmcgd.getResults(PATH_ENGLISH_STEMMER,1,3,5,10);
-        rp.computeAll(PATH_ENGLISH_STEMMER);
-        System.out.println(PATH_STOPWORD_STEMMER);
-        nmcgd.getResults(PATH_STOPWORD_STEMMER,1,3,5,10);
-        rp.computeAll(PATH_STOPWORD_STEMMER);
+        rp.printMeans(PATH_DEFAULT_STEMMER);
+        System.out.println("ENGLISH STEMMER");
+     //   nmcgd.getResults(PATH_ENGLISH_STEMMER,1,3,5,10);
+        rp.printMeans(PATH_ENGLISH_STEMMER);
+        System.out.println("STOPWORDS STEMMER");
+      //  nmcgd.getResults(PATH_STOPWORD_STEMMER,1,3,5,10);/
+        rp.printMeans(PATH_STOPWORD_STEMMER);
 
     }
 }

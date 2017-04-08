@@ -2,7 +2,7 @@ package performance;
 
 import data.ReadFile;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -76,18 +76,40 @@ public class RPrecision extends Query {
     /**
      * Computes the average R-precision of all the query results in the given stemmer folder.
      * Hard coded variables ...:(
+     *
      * @param pathToStemmer
      * @return
      */
-    public List<Double> computeAll(String pathToStemmer) {
-        List<Double> results = new ArrayList<>();
+    public Map<String, Double> computeAll(String pathToStemmer) {
+        Map<String, Double> results = new HashMap<>();
         String relevantDocumentsFileName = this.rf.getRelevantDocumentsQueryPath(pathToStemmer);
-        for(String fileName : this.rf.getQueryFiles(pathToStemmer)) {
-            double rprecision = this.averageRPrecision(relevantDocumentsFileName, fileName);
-            LOGGER.info("Computing R-Precision of"+fileName+": "+rprecision);
-            results.add(rprecision);
+        for (String filePath : this.rf.getQueryFiles(pathToStemmer)) {
+            double rprecision = this.averageRPrecision(relevantDocumentsFileName, filePath);
+            String fileName = filePath.replaceAll(pathToStemmer, "");
+            // LOGGER.info("Computing R-Precision of " + fileName + ": " + rprecision);
+            results.put(fileName, rprecision);
         }
         return results;
+    }
+
+    public void printMeans(String pathToStemmer) {
+        double csMean = 0.;
+        double tfidfMean = 0.;
+        double bm25Mean = 0.;
+        Map<String, Double> results = this.computeAll(pathToStemmer);
+        for (String fileName : results.keySet()) {
+            if (fileName.contains("cs")) {
+                csMean += results.get(fileName);
+            } else if (fileName.contains("tfidf")) {
+                tfidfMean += results.get(fileName);
+            } else if (fileName.contains("bm25")) {
+                bm25Mean += results.get(fileName);
+            }
+        }
+
+        System.out.println("CountScorer = " + csMean / 3.);
+        System.out.println("TfIdf = " + tfidfMean / 3.);
+        System.out.println("BM25 = " + bm25Mean / 3.);
     }
 
 }
