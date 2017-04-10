@@ -28,11 +28,13 @@ public class NMCGD extends Query {
         List<Integer> retrievedDocuments = query2retrievedDocuments.get(queryId);
         double MDCG = relevance(retrievedDocuments.get(0),relevantDocuments);
         // aggiungere gestione caso in cui la query non ritorna risultati
-        double logBaseTwoK = Math.log10(k)/Math.log(2.);
-        for( int i = 2 ; i<= k; i++){
-            MDCG += relevance(retrievedDocuments.get(i), relevantDocuments) / logBaseTwoK;
+        double MaximumMDCG = 1.0;
+        if(k>1) {
+            double logBaseTwoK = Math.log10(k) / Math.log(2.);
+            for (int i = 2; i <= k; i++)
+                MDCG += relevance(retrievedDocuments.get(i), relevantDocuments) / logBaseTwoK;
+            MaximumMDCG = 1 + (double) (k - 1) / logBaseTwoK;// k/log2k
         }
-        double MaximumMDCG = 1 + (double)(k-1)/logBaseTwoK;// k/log2k
         return MDCG/MaximumMDCG;
 
     }
