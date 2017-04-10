@@ -88,6 +88,14 @@ public class NMCGD extends Query {
    }
 
 
+    @Override
+    public Map<String, Integer> compute(String pathToStemmer, int... k) {
+        return null;
+    }
 
+    @Override
+    public double computeSingle(String pathToStememr, int queryId, int... k) {
+        return 0;
+    }
 }
 

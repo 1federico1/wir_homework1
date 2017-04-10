@@ -14,28 +14,28 @@ import java.util.logging.Logger;
  */
 public class RPrecision extends Query {
     private ReadFile rf;
-    private static final String PATH_TO_GROUND_TRUTH = "/home/federico/Dropbox/intellij/wir_homework1/" +
-            "Cranfield_DATASET/default/cran_Ground_Truth.tsv";
-    private Map<Integer, List<Integer>> query2relevantDocuments;
+    private static final String PATH_DEFAULT_STEMMER = "/home/federico/Dropbox/intellij/wir_homework1/" +
+            "Cranfield_DATASET/default/";
+    private static final String PATH_ENGLISH_STEMMER = "/home/federico/Dropbox/intellij/wir_homework1/" +
+            "Cranfield_DATASET/stemmer/";
+    private static final String PATH_STOPWORD_STEMMER = "/home/federico/Dropbox/intellij/wir_homework1/" +
+            "Cranfield_DATASET/stopword_stemmer/";
     private static final Logger LOGGER = Logger.getLogger(RPrecision.class.getName());
 
 
     public RPrecision() {
         this.rf = new ReadFile();
-        this.query2relevantDocuments = this.rf.getQueryIdRetrievedDocuments(PATH_TO_GROUND_TRUTH);
     }
 
     /**
      * Computes the R-precision for a single performance, compared with the Ground Truth (relevant documents) performance results.
-     * @param pathToQueryFile
      * @param queryId
      * @return the value of the R-precision
      */
-    private double computeSingleQuery(String pathToQueryFile, int queryId) {
-        Map<Integer, List<Integer>> query2retrievedDocuments = rf.getQueryIdRetrievedDocuments(pathToQueryFile);
-        List<Integer> relevantDocuments = query2relevantDocuments.get(queryId);
+    private double computeSingleQuery(Map<Integer, List<Integer>> map, int queryId) {
+        List<Integer> relevantDocuments = this.rf.getGroundTruth().get(queryId);
+        List<Integer> retrievedDocuments = map.get(queryId);
         int numberOfRelevantDocuments = relevantDocuments.size();
-        List<Integer> retrievedDocuments = query2retrievedDocuments.get(queryId);
         /*
         Cutoff the list of returned documents at the position indicated by the size of the relevant documents set.
          */
@@ -58,35 +58,44 @@ public class RPrecision extends Query {
      * Computes the R-precision for all the queries in the file passed as parameter, compared with the Ground Truth
      * performance results.
      *
-     * @param pathToQueryFile
      * @return the average of all the R-precisions computed among the retrieved documents.
      */
-    private double averageRPrecision(String pathToQueryFile) {
+    private double averageRPrecision(Map<Integer, List<Integer>> map) {
         double count = 0.0;
-        for (int queryId : query2relevantDocuments.keySet()) {
-            count += this.computeSingleQuery(pathToQueryFile, queryId);
+        for (int queryId : this.rf.getGroundTruth().keySet()) {
+            count += this.computeSingleQuery(map, queryId);
         }
-        return count / (double) query2relevantDocuments.keySet().size();
+        return count / (double) this.rf.getGroundTruth().keySet().size();
     }
 
     /**
      * Computes the average R-precision of all the query results in the given stemmer folder.
      *
-     * @param pathToStemmer
      * @return
      */
-    public Map<String, Double> computeAll(String pathToStemmer) {
+    public Map<String, Double> computeAll() {
         Map<String, Double> results = new HashMap<>();
-        for (String filePath : this.rf.getQueryFiles(pathToStemmer)) {
-            double rprecision = this.averageRPrecision(filePath);
-            String fileName = filePath.replaceAll(pathToStemmer, "");
-            System.out.println("Computing R-Precision of " + fileName + ": " + rprecision);
-            results.put(fileName, rprecision);
+        for (String file : this.rf.getFiles().keySet()) {
+            double rprecision = this.averageRPrecision(this.rf.getFiles().get(file));
+            System.out.println("Computing R-Precision of " + file + ": " + rprecision);
+            results.put(file, rprecision);
         }
         return results;
     }
 
-    public void printMeans(String pathToStemmer) {
+    public void computeAllTheValues() {
+        System.out.println("DEFAULT STEMMER");
+        this.rf.init(PATH_DEFAULT_STEMMER);
+        computeAll();
+        System.out.println("ENGLISH STEMMER");
+        this.rf.init(PATH_ENGLISH_STEMMER);
+        computeAll();
+        System.out.println("STOPWORD STEMMER");
+        this.rf.init(PATH_STOPWORD_STEMMER);
+        computeAll();
+    }
+
+    /*public void printMeans(String pathToStemmer) {
         System.out.println("AVERAGE R-PRECISION OF " + pathToStemmer);
         double csMean = 0.;
         double tfidfMean = 0.;
@@ -105,6 +114,15 @@ public class RPrecision extends Query {
         System.out.println("COUNTER SCORER = " + (csMean / 3.));
         System.out.println("TFIDF = " + (tfidfMean / 3.));
         System.out.println("BM25 = " + (bm25Mean / 3.));
+    }*/
+
+    @Override
+    public Map<String, Integer> compute(String pathToStemmer, int... k) {
+        return null;
     }
 
+    @Override
+    public double computeSingle(String pathToStememr, int queryId, int... k) {
+        return 0;
+    }
 }
