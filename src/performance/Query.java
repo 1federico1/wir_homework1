@@ -7,13 +7,10 @@ import java.util.List;
  */
 public abstract class Query {
 
-    public int relevance(int docId, List<Integer> relevantDocuments) {
+    int relevance(int docId, List<Integer> relevantDocuments) {
         if (relevantDocuments.contains(docId)) {
             return 1;
-        }
-        return 0;
+        } else
+            return 0;
     }
-
-
-
 }

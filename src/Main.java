@@ -1,7 +1,5 @@
-import performance.NMCGD;
+import performance.NMDCG;
 import performance.RPrecision;
-
-import java.io.File;
 
 /**
  * Created by federico on 4/1/17.
@@ -17,15 +15,15 @@ public class Main {
 
     public static void main(String[] args) {
         System.out.println("DEFAULT STEMMER");
-        NMCGD nmcgd = new NMCGD();
-      //  nmcgd.getResults(PATH_DEFAULT_STEMMER,1,3,5,10);
+        NMDCG NMDCG = new NMDCG();
+        NMDCG.getResults(PATH_DEFAULT_STEMMER,1,3,5,10);
         RPrecision rp = new RPrecision();
         rp.printMeans(PATH_DEFAULT_STEMMER);
         System.out.println("ENGLISH STEMMER");
-     //   nmcgd.getResults(PATH_ENGLISH_STEMMER,1,3,5,10);
+        NMDCG.getResults(PATH_ENGLISH_STEMMER,1,3,5,10);
         rp.printMeans(PATH_ENGLISH_STEMMER);
         System.out.println("STOPWORDS STEMMER");
-      //  nmcgd.getResults(PATH_STOPWORD_STEMMER,1,3,5,10);/
+        NMDCG.getResults(PATH_STOPWORD_STEMMER,1,3,5,10);
         rp.printMeans(PATH_STOPWORD_STEMMER);
 
     }

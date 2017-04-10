@@ -27,13 +27,11 @@ public class RPrecision extends Query {
 
     /**
      * Computes the R-precision for a single performance, compared with the Ground Truth (relevant documents) performance results.
-     *
-     * @param pathToGroundTruth
      * @param pathToQueryFile
      * @param queryId
      * @return the value of the R-precision
      */
-    private double computeSingleQuery(String pathToGroundTruth, String pathToQueryFile, int queryId) {
+    private double computeSingleQuery(String pathToQueryFile, int queryId) {
         Map<Integer, List<Integer>> query2retrievedDocuments = rf.getQueryIdRetrievedDocuments(pathToQueryFile);
         List<Integer> relevantDocuments = query2relevantDocuments.get(queryId);
         int numberOfRelevantDocuments = relevantDocuments.size();
@@ -42,7 +40,6 @@ public class RPrecision extends Query {
         Cutoff the list of returned documents at the position indicated by the size of the relevant documents set.
          */
         retrievedDocuments = retrievedDocuments.subList(0, numberOfRelevantDocuments);
-
         /*
         For each retrieved document check if it is present in the relevant document set
          */
@@ -50,9 +47,9 @@ public class RPrecision extends Query {
         for (int docId : retrievedDocuments) {
             numberOfRetrievedDocuments += relevance(docId, relevantDocuments);
         }
-        if (numberOfRelevantDocuments == 0) {
+        if (numberOfRelevantDocuments == 0)
             return 0.0;
-        } else
+        else
             return (double) numberOfRetrievedDocuments / (double) numberOfRelevantDocuments;
     }
 
@@ -61,38 +58,36 @@ public class RPrecision extends Query {
      * Computes the R-precision for all the queries in the file passed as parameter, compared with the Ground Truth
      * performance results.
      *
-     * @param pathToGroundTruth
      * @param pathToQueryFile
      * @return the average of all the R-precisions computed among the retrieved documents.
      */
-    private double averageRPrecision(String pathToGroundTruth, String pathToQueryFile) {
+    private double averageRPrecision(String pathToQueryFile) {
         double count = 0.0;
         for (int queryId : query2relevantDocuments.keySet()) {
-            count += this.computeSingleQuery(pathToGroundTruth, pathToQueryFile, queryId);
+            count += this.computeSingleQuery(pathToQueryFile, queryId);
         }
         return count / (double) query2relevantDocuments.keySet().size();
     }
 
     /**
      * Computes the average R-precision of all the query results in the given stemmer folder.
-     * Hard coded variables ...:(
      *
      * @param pathToStemmer
      * @return
      */
     public Map<String, Double> computeAll(String pathToStemmer) {
         Map<String, Double> results = new HashMap<>();
-        String relevantDocumentsFileName = this.rf.getRelevantDocumentsQueryPath(pathToStemmer);
         for (String filePath : this.rf.getQueryFiles(pathToStemmer)) {
-            double rprecision = this.averageRPrecision(relevantDocumentsFileName, filePath);
+            double rprecision = this.averageRPrecision(filePath);
             String fileName = filePath.replaceAll(pathToStemmer, "");
-            // LOGGER.info("Computing R-Precision of " + fileName + ": " + rprecision);
+            System.out.println("Computing R-Precision of " + fileName + ": " + rprecision);
             results.put(fileName, rprecision);
         }
         return results;
     }
 
     public void printMeans(String pathToStemmer) {
+        System.out.println("AVERAGE R-PRECISION OF " + pathToStemmer);
         double csMean = 0.;
         double tfidfMean = 0.;
         double bm25Mean = 0.;
@@ -107,9 +102,9 @@ public class RPrecision extends Query {
             }
         }
 
-        System.out.println("CountScorer = " + csMean / 3.);
-        System.out.println("TfIdf = " + tfidfMean / 3.);
-        System.out.println("BM25 = " + bm25Mean / 3.);
+        System.out.println("COUNTER SCORER = " + (csMean / 3.));
+        System.out.println("TFIDF = " + (tfidfMean / 3.));
+        System.out.println("BM25 = " + (bm25Mean / 3.));
     }
 
 }
