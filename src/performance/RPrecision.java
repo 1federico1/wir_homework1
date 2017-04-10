@@ -20,8 +20,6 @@ public class RPrecision extends Query {
             "Cranfield_DATASET/stemmer/";
     private static final String PATH_STOPWORD_STEMMER = "/home/federico/Dropbox/intellij/wir_homework1/" +
             "Cranfield_DATASET/stopword_stemmer/";
-    private static final Logger LOGGER = Logger.getLogger(RPrecision.class.getName());
-
 
     public RPrecision() {
         this.rf = new ReadFile();
@@ -29,6 +27,7 @@ public class RPrecision extends Query {
 
     /**
      * Computes the R-precision for a single performance, compared with the Ground Truth (relevant documents) performance results.
+     *
      * @param queryId
      * @return the value of the R-precision
      */
@@ -83,7 +82,7 @@ public class RPrecision extends Query {
         return results;
     }
 
-    public void computeAllTheValues() {
+    public void computeValuesForAllTheStemmers() {
         System.out.println("DEFAULT STEMMER");
         this.rf.init(PATH_DEFAULT_STEMMER);
         computeAll();
@@ -95,34 +94,4 @@ public class RPrecision extends Query {
         computeAll();
     }
 
-    /*public void printMeans(String pathToStemmer) {
-        System.out.println("AVERAGE R-PRECISION OF " + pathToStemmer);
-        double csMean = 0.;
-        double tfidfMean = 0.;
-        double bm25Mean = 0.;
-        Map<String, Double> results = this.computeAll(pathToStemmer);
-        for (String fileName : results.keySet()) {
-            if (fileName.contains("cs")) {
-                csMean += results.get(fileName);
-            } else if (fileName.contains("tfidf")) {
-                tfidfMean += results.get(fileName);
-            } else if (fileName.contains("bm25")) {
-                bm25Mean += results.get(fileName);
-            }
-        }
-
-        System.out.println("COUNTER SCORER = " + (csMean / 3.));
-        System.out.println("TFIDF = " + (tfidfMean / 3.));
-        System.out.println("BM25 = " + (bm25Mean / 3.));
-    }*/
-
-    @Override
-    public Map<String, Integer> compute(String pathToStemmer, int... k) {
-        return null;
-    }
-
-    @Override
-    public double computeSingle(String pathToStememr, int queryId, int... k) {
-        return 0;
-    }
 }

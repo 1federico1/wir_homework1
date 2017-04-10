@@ -3,7 +3,6 @@ package aggregation;
 import data.ReadFile;
 
 import java.util.*;
-import java.util.stream.Stream;
 
 /**
  * Created by federico on 4/9/17.
@@ -28,6 +27,7 @@ public class Fagin {
     }
 
     public Map<Integer, Double> fagin(int queryId, int k) {
+        System.out.println(this.groundTruth.get(queryId).size());
         Map<Integer, Double> text = this.rf.getDocIdScore(PATH_TO_BM25TEXT, queryId);
         Map<Integer, Double> title = this.rf.getDocIdScore(PATH_TO_BM25TITLE, queryId);
         List<Double> textScores = new LinkedList<>(text.values());
@@ -42,7 +42,6 @@ public class Fagin {
         int position = 0;
 
         while (found <= k && position <= text.keySet().size()) {
-            System.out.println(found);
             if (seen.keySet().contains(textKeys.get(position))) {
                 found++;
                 seen.remove(textKeys.get(position));
@@ -62,7 +61,6 @@ public class Fagin {
             position++;
 
         }
-
 
         for (Integer docId : seen.keySet()) {
             if (textSeen.containsKey(docId)) {

@@ -1,5 +1,4 @@
 import aggregation.Fagin;
-import data.ReadFile;
 import performance.NMDCG;
 import performance.RPrecision;
 
@@ -19,12 +18,12 @@ public class Main {
 
     public static void main(String[] args) {
         NMDCG NMDCG = new NMDCG();
-        NMDCG.computeAllTheValues(1, 3, 5, 10);
+        NMDCG.computeValuesForAllTheStemmers(1, 3, 5, 10);
         RPrecision rp = new RPrecision();
-        rp.computeAllTheValues();
+        rp.computeValuesForAllTheStemmers();
         System.out.println("FAGIAN");
         Fagin f = new Fagin();
-        Map<Integer, Double> output = f.fagin(1, 21);
+        Map<Integer, Double> output = f.fagin(1, 1);
         for (int key : output.keySet())
             System.out.println(key + " = " + output.get(key));
 

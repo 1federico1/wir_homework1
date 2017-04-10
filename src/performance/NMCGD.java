@@ -80,22 +80,5 @@ public class NMCGD extends Query {
        }
        return result;
    }
-
-   public void getResults(String pathToStemmer, int... val) {
-       for(int k : val) {
-           this.computeNMCDGForAllTheQueries(pathToStemmer, k);
-       }
-   }
-
-
-    @Override
-    public Map<String, Integer> compute(String pathToStemmer, int... k) {
-        return null;
-    }
-
-    @Override
-    public double computeSingle(String pathToStememr, int queryId, int... k) {
-        return 0;
-    }
 }
 

@@ -16,15 +16,6 @@ public abstract class Query {
             "Cranfield_DATASET/stemmer/";
     private static final String PATH_STOPWORD_STEMMER = "/home/federico/Dropbox/intellij/wir_homework1/" +
             "Cranfield_DATASET/stopword_stemmer/";
-    private ReadFile rf;
-
-    public Query() {
-        this.rf = new ReadFile();
-    }
-
-    public abstract Map<String, Integer> compute(String pathToStemmer, int ... k);
-
-    public abstract double computeSingle(String pathToStememr, int queryId, int ... k);
 
     int relevance(int docId, List<Integer> relevantDocuments) {
         if (relevantDocuments.contains(docId)) {
