@@ -1,6 +1,7 @@
 package aggregation;
 
 import data.ReadFile;
+import data.Utility;
 
 import java.util.*;
 
@@ -12,9 +13,9 @@ public class Fagin {
     private static final String PATH_TO_GROUND_TRUTH = "/home/federico/Dropbox/intellij/wir_homework1/" +
             "Cranfield_DATASET/default/cran_Ground_Truth.tsv";
     private static final String PATH_TO_BM25TEXT = "/home/federico/Dropbox/intellij/wir_homework1/" +
-            "Cranfield_DATASET/stopword_stemmer/output_bm25text_stopword.tsv";
+            "Cranfield_DATASET/stopword_stemmer/output_bm25text.tsv";
     private static final String PATH_TO_BM25TITLE = "/home/federico/Dropbox/intellij/wir_homework1/" +
-            "Cranfield_DATASET/stopword_stemmer/output_bm25title_stopword.tsv";
+            "Cranfield_DATASET/stopword_stemmer/output_bm25title.tsv";
     private Map<Integer, List<Integer>> groundTruth;
 
     public Fagin() {
@@ -27,7 +28,6 @@ public class Fagin {
     }
 
     public Map<Integer, Double> fagin(int queryId, int k) {
-        System.out.println(this.groundTruth.get(queryId).size());
         Map<Integer, Double> text = this.rf.getDocIdScore(PATH_TO_BM25TEXT, queryId);
         Map<Integer, Double> title = this.rf.getDocIdScore(PATH_TO_BM25TITLE, queryId);
         List<Double> textScores = new LinkedList<>(text.values());
@@ -41,27 +41,36 @@ public class Fagin {
         int found = 0;
         int position = 0;
 
-        while (found <= k && position <= text.keySet().size()) {
+        while (found < k && position <= text.keySet().size()) {
+
             if (seen.keySet().contains(textKeys.get(position))) {
+                System.out.println("found in text " + textKeys.get(position));
                 found++;
+                System.out.println(textKeys.get(position)+" = " +textScores.get(position));
+                result.put(textKeys.get(position), textScores.get(position) + title.get(textKeys.get(position)) * 2.);
                 seen.remove(textKeys.get(position));
             } else {
+                System.out.println("seen in text " + textKeys.get(position));
+                System.out.println(titleKeys.get(position)+" = " +titleScores.get(position));
+
                 seen.put(textKeys.get(position), textScores.get(position));
                 textSeen.put(textKeys.get(position), textScores.get(position));
             }
 
             if (seen.keySet().contains(titleKeys.get(position))) {
+                System.out.println("found in title " + titleKeys.get(position));
+                result.put(titleKeys.get(position), titleScores.get(position)*2. + text.get(titleKeys.get(position)));
                 seen.remove(titleKeys.get(position));
                 found++;
 
             } else {
+                System.out.println("seen in title " + titleKeys.get(position));
                 seen.put(titleKeys.get(position), titleScores.get(position));
                 titleSeen.put(titleKeys.get(position), titleScores.get(position));
             }
             position++;
 
         }
-
         for (Integer docId : seen.keySet()) {
             if (textSeen.containsKey(docId)) {
                 double textScore = textSeen.get(docId);
@@ -81,15 +90,19 @@ public class Fagin {
         Collections.sort(scores);
         Collections.reverse(scores);
         Map<Integer, Double> ordered = new LinkedHashMap<>();
-        for(double score : scores) {
-            for(int key : result.keySet()) {
-                if(score == result.get(key)) {
-                    ordered.put(key, score);
-                }
-            }
-        }
 
+        Utility.orderMap(k, result, scores, ordered);
         return ordered;
+    }
+
+
+    public void printResult(Map<Integer, Double> results, int queryId) {
+        System.out.println("QUERY\tDOC_ID\tRANK\tSCORE");
+        int rank=1;
+        for(int docId : results.keySet()) {
+            System.out.println(queryId+"\t"+docId+"\t"+rank+"\t"+results.get(docId));
+            rank++;
+        }
     }
 }
 

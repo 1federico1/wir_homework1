@@ -1,4 +1,5 @@
 import aggregation.Fagin;
+import aggregation.Threshold;
 import performance.NMDCG;
 import performance.RPrecision;
 
@@ -17,15 +18,15 @@ public class Main {
             "Cranfield_DATASET/stopword_stemmer/";
 
     public static void main(String[] args) {
-        NMDCG NMDCG = new NMDCG();
+ NMDCG NMDCG = new NMDCG();
         NMDCG.computeValuesForAllTheStemmers(1, 3, 5, 10);
         RPrecision rp = new RPrecision();
         rp.computeValuesForAllTheStemmers();
-        System.out.println("FAGIAN");
+        System.out.println("FAGIN");
         Fagin f = new Fagin();
-        Map<Integer, Double> output = f.fagin(1, 1);
-        for (int key : output.keySet())
-            System.out.println(key + " = " + output.get(key));
-
+        Map<Integer, Double> output = f.fagin(1, 21);
+        f.printResult(output, 1);
+        System.out.println("THRESHOLD");
+        Threshold t = new Threshold();
     }
 }

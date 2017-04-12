@@ -1,6 +1,7 @@
 package performance;
 
 import data.ReadFile;
+import data.Utility;
 
 import java.util.HashMap;
 import java.util.List;
@@ -12,7 +13,7 @@ import java.util.logging.Logger;
  * documents returned.
  * <p>
  */
-public class RPrecision extends Query {
+public class RPrecision {
     private ReadFile rf;
     private static final String PATH_DEFAULT_STEMMER = "/home/federico/Dropbox/intellij/wir_homework1/" +
             "Cranfield_DATASET/default/";
@@ -31,25 +32,26 @@ public class RPrecision extends Query {
      * @param queryId
      * @return the value of the R-precision
      */
-    private double computeSingleQuery(Map<Integer, List<Integer>> map, int queryId) {
+    public double computeSingleQuery(Map<Integer, List<Integer>> map, int queryId) {
         List<Integer> relevantDocuments = this.rf.getGroundTruth().get(queryId);
         List<Integer> retrievedDocuments = map.get(queryId);
-        int numberOfRelevantDocuments = relevantDocuments.size();
+        double numberOfRelevantDocuments = relevantDocuments.size();
         /*
         Cutoff the list of returned documents at the position indicated by the size of the relevant documents set.
          */
-        retrievedDocuments = retrievedDocuments.subList(0, numberOfRelevantDocuments);
+        retrievedDocuments = retrievedDocuments.subList(0, (int)numberOfRelevantDocuments);
         /*
         For each retrieved document check if it is present in the relevant document set
          */
-        int numberOfRetrievedDocuments = 0;
+        double numberOfRetrievedDocuments = 0.;
         for (int docId : retrievedDocuments) {
-            numberOfRetrievedDocuments += relevance(docId, relevantDocuments);
+            numberOfRetrievedDocuments += Utility.relevance(docId, relevantDocuments);
         }
-        if (numberOfRelevantDocuments == 0)
-            return 0.0;
-        else
-            return (double) numberOfRetrievedDocuments / (double) numberOfRelevantDocuments;
+        if (numberOfRelevantDocuments == 0.)
+            return 0.;
+        else {
+            return numberOfRetrievedDocuments / numberOfRelevantDocuments;
+        }
     }
 
 
