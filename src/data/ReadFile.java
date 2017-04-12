@@ -17,6 +17,12 @@ public class ReadFile {
             "Cranfield_DATASET/stopword_stemmer/output_bm25text.tsv";
     private static final String PATH_TO_BM25TITLE = "/home/federico/Dropbox/intellij/wir_homework1/" +
             "Cranfield_DATASET/stopword_stemmer/output_bm25title.tsv";
+    private static final String PATH_DEFAULT_STEMMER = "/home/federico/Dropbox/intellij/wir_homework1/" +
+            "Cranfield_DATASET/default/";
+    private static final String PATH_ENGLISH_STEMMER = "/home/federico/Dropbox/intellij/wir_homework1/" +
+            "Cranfield_DATASET/stemmer";
+    private static final String PATH_STOPWORD_STEMMER = "/home/federico/Dropbox/intellij/wir_homework1/" +
+            "Cranfield_DATASET/stopword_stemmer";
 
     private Map<Integer, List<Integer>> groundTruth;
 
