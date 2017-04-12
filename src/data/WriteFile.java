@@ -3,10 +3,8 @@ package data;
 import aggregation.Fagin;
 
 import java.io.*;
-import java.nio.file.Files;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 
 /**
  * Created by federico on 4/12/17.
@@ -15,7 +13,7 @@ public class WriteFile {
 
     private ReadFile rf;
 
-    public void writeFile(String fileName) {
+    public void writeFile(String fileName, Map<Integer, Map<Integer, Double>> result) {
         rf = new ReadFile();
         FileWriter fw = null;
         BufferedWriter bw = null;
@@ -26,17 +24,16 @@ public class WriteFile {
             fw = new FileWriter(fileName, true);
             pw = new PrintWriter(fw);
             pw.println("QUERY\tDOC_ID\tRANK\tSCORE");
-            for (Integer queryId : groundTruth.keySet()) {
+            for (Integer queryId : result.keySet()) {
                 pw = new PrintWriter(fw);
                 Integer rank = 1;
-                Map<Integer, Double> docId2Score = f.fagin(queryId);
+                Map<Integer, Double> docId2Score = result.get(queryId);
                 for(Integer docId : docId2Score.keySet()) {
                     String line;
                     line = queryId.toString();
                     line = line + "\t"+rank.toString();
                     line = line +"\t" + docId.toString();
                     line = line + "\t" + docId2Score.get(docId);
-                    System.out.println(line);
                     pw.println(line);
                     rank++;
                 }

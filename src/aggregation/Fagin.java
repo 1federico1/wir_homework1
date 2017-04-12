@@ -26,6 +26,15 @@ public class Fagin {
         }
     }
 
+    public Map<Integer, Map<Integer, Double>> compute() {
+        Map<Integer, Map<Integer, Double>> result = new LinkedHashMap<>();
+        for(int queryId : this.groundTruth.keySet()) {
+            Map<Integer, Double> tmp = this.fagin(queryId);
+            result.put(queryId, tmp);
+        }
+        return result;
+    }
+
     public Map<Integer, Double> fagin(int queryId) {
         //k is set as the number of relevant document for the given query
         int k = this.groundTruth.get(queryId).size();
