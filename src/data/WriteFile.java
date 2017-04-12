@@ -13,7 +13,6 @@ import java.util.Properties;
  */
 public class WriteFile {
 
-    private static final String pathToResults = "/home/federico/Dropbox/intellij/wir_homework1/results";
     private ReadFile rf;
 
     public void writeFile(String fileName) {
@@ -25,10 +24,10 @@ public class WriteFile {
         Fagin f = new Fagin();
         try {
             fw = new FileWriter(fileName, true);
-            bw = new BufferedWriter(fw);
             pw = new PrintWriter(fw);
             pw.println("QUERY\tDOC_ID\tRANK\tSCORE");
             for (Integer queryId : groundTruth.keySet()) {
+                pw = new PrintWriter(fw);
                 Integer rank = 1;
                 Map<Integer, Double> docId2Score = f.fagin(queryId);
                 for(Integer docId : docId2Score.keySet()) {
@@ -37,11 +36,13 @@ public class WriteFile {
                     line = line + "\t"+rank.toString();
                     line = line +"\t" + docId.toString();
                     line = line + "\t" + docId2Score.get(docId);
+                    System.out.println(line);
                     pw.println(line);
                     rank++;
                 }
 
             }
+            pw.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
