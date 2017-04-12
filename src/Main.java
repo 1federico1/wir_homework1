@@ -4,24 +4,21 @@ import data.Utility;
 import performance.NMDCG;
 import performance.RPrecision;
 
-import java.util.Map;
-
 /**
  * Created by federico on 4/1/17.
  */
 public class Main {
 
     public static void main(String[] args) {
-        NMDCG NMDCG = new NMDCG();
+/*        NMDCG NMDCG = new NMDCG();
         NMDCG.computeValuesForAllTheStemmers(1, 3, 5, 10);
         RPrecision rp = new RPrecision();
         rp.computeValuesForAllTheStemmers();
         System.out.println("FAGIN");
         Fagin f = new Fagin();
-        f.computeFaginForAllTheQueries();
+        f.computeFaginForAllTheQueries();*/
         System.out.println("THRESHOLD");
         Threshold t = new Threshold();
-        Utility.printResult(t.threshold(1, 1), 1);
-
+        t.computeThresholdForAllTheQueries();
     }
 }

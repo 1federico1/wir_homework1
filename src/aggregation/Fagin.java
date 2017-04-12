@@ -53,13 +53,11 @@ public class Fagin {
             //the current value was seen previously
             double textScore = text.get(textDocId);
             if (seen.containsKey(textDocId)) {
-                System.out.println("found in text " + textDocId);
                 found++;
                 double titleScore = title.get(textDocId) * 2.;
                 result.put(textDocId, textScore + titleScore );
                 seen.remove(textDocId);
             } else {
-                System.out.println("seen in text " + textDocId);
                 seen.put(textDocId, textScore);
                 textSeen.put(textDocId, textScore);
             }
@@ -67,14 +65,12 @@ public class Fagin {
             int titleDocId = titleDocIds.get(position);
             double titleScore = title.get(titleDocId) * 2.;
             if (seen.containsKey(titleDocId)) {
-                System.out.println("found in title " + titleDocId);
                 textScore = text.get(titleDocId);
                 result.put(titleDocId, titleScore + textScore);
                 seen.remove(titleDocId);
                 found++;
 
             } else {
-                System.out.println("seen in title " + titleDocId);
                 seen.put(titleDocId, titleScore);
                 titleSeen.put(titleDocId, titleScore);
             }
