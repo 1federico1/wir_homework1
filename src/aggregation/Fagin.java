@@ -81,16 +81,22 @@ public class Fagin {
             position++;
 
         }
+        //seen contains the values seen in only one ranking
         for (Integer docId : seen.keySet()) {
+            //the current docId was seen in text
             if (textSeen.containsKey(docId)) {
                 double textScore = textSeen.get(docId);
                 double titleScore = 0.;
+                //title ranking may not contain the current document
                 if (title.containsKey(docId))
                     titleScore = title.get(docId) * 2.;
                 result.put(docId, textScore + titleScore);
-            } else if (titleSeen.containsKey(docId)) {
+            }
+            //the current docId was seen in title
+            else if (titleSeen.containsKey(docId)) {
                 double titleScore = titleSeen.get(docId) * 2.;
                 double textScore = 0.;
+                //text ranking may not contain the current document
                 if (text.containsKey(docId))
                     textScore = text.get(docId);
                 result.put(docId, textScore + titleScore);
@@ -100,7 +106,6 @@ public class Fagin {
         Collections.sort(scores);
         Collections.reverse(scores);
         Map<Integer, Double> ordered = new LinkedHashMap<>();
-
         Utility.orderMap(k, result, scores, ordered);
         return ordered;
     }

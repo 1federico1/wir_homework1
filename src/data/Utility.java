@@ -16,6 +16,7 @@ public class Utility {
                             "Cranfield_DATASET/stopword_stemmer/";
 
     public static void orderMap(int k, Map<Integer, Double> result, List<Double> scores, Map<Integer, Double> ordered) {
+        //rebuilds the map corresponding to the top k scores
         int i = 0;
         for(double score : scores) {
             for(int key : result.keySet()) {
