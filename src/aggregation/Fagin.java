@@ -28,11 +28,10 @@ public class Fagin {
     }
 
     public Map<Integer, Double> fagin(int queryId) {
+        //k is set as the number of relevant document for the given query
         int k = this.groundTruth.get(queryId).size();
         Map<Integer, Double> text = this.rf.getDocIdScore(PATH_TO_BM25TEXT, queryId);
         Map<Integer, Double> title = this.rf.getDocIdScore(PATH_TO_BM25TITLE, queryId);
-        List<Double> textScores = new LinkedList<>(text.values());
-        List<Double> titleScores = new LinkedList<>(title.values());
         List<Integer> textDocIds = new LinkedList<>(text.keySet());
         List<Integer> titleDocIds = new LinkedList<>(title.keySet());
         //contains values seen once
@@ -46,30 +45,35 @@ public class Fagin {
         int position = 0;
         //rankings have same size
         while (found < k && position <= text.keySet().size()) {
-            if (seen.keySet().contains(textDocIds.get(position))) {
-                System.out.println("found in text " + textDocIds.get(position));
+            //current element of the text ranking
+            int textDocId = textDocIds.get(position);
+            //the current value was seen previously
+            double textScore = text.get(textDocId);
+            if (seen.containsKey(textDocId)) {
+                System.out.println("found in text " + textDocId);
                 found++;
-                System.out.println(textDocIds.get(position)+" = " +textScores.get(position));
-                result.put(textDocIds.get(position), textScores.get(position) + title.get(textDocIds.get(position)) * 2.);
-                seen.remove(textDocIds.get(position));
+                double titleScore = title.get(textDocId) * 2.;
+                result.put(textDocId, textScore + titleScore );
+                seen.remove(textDocId);
             } else {
-                System.out.println("seen in text " + textDocIds.get(position));
-                System.out.println(titleDocIds.get(position)+" = " +titleScores.get(position));
-
-                seen.put(textDocIds.get(position), textScores.get(position));
-                textSeen.put(textDocIds.get(position), textScores.get(position));
+                System.out.println("seen in text " + textDocId);
+                seen.put(textDocId, textScore);
+                textSeen.put(textDocId, textScore);
             }
-
-            if (seen.keySet().contains(titleDocIds.get(position))) {
-                System.out.println("found in title " + titleDocIds.get(position));
-                result.put(titleDocIds.get(position), titleScores.get(position)*2. + text.get(titleDocIds.get(position)));
-                seen.remove(titleDocIds.get(position));
+            //current element of the title ranking
+            int titleDocId = titleDocIds.get(position);
+            double titleScore = title.get(titleDocId) * 2.;
+            if (seen.containsKey(titleDocId)) {
+                System.out.println("found in title " + titleDocId);
+                textScore = text.get(titleDocId);
+                result.put(titleDocId, titleScore + textScore);
+                seen.remove(titleDocId);
                 found++;
 
             } else {
-                System.out.println("seen in title " + titleDocIds.get(position));
-                seen.put(titleDocIds.get(position), titleScores.get(position));
-                titleSeen.put(titleDocIds.get(position), titleScores.get(position));
+                System.out.println("seen in title " + titleDocId);
+                seen.put(titleDocId, titleScore);
+                titleSeen.put(titleDocId, titleScore);
             }
             position++;
 
