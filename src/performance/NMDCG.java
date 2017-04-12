@@ -72,7 +72,7 @@ public class NMDCG {
         System.out.println("DEFAULT STEMMER");
         this.rf.init(getPathDefaultStemmer());
         computeAllK(val);
-        System.out.println("eNGLISH STEMMER");
+        System.out.println("ENGLISH STEMMER");
         this.rf.init(getPathEnglishStemmer());
         computeAllK(val);
         System.out.println("STOPWORD STEMMER");

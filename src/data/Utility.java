@@ -8,8 +8,6 @@ import java.util.Map;
  */
 public class Utility {
 
-
-
     public static void orderMap(int k, Map<Integer, Double> result, List<Double> scores, Map<Integer, Double> ordered) {
         //rebuilds the map corresponding to the top k scores
         int i = 0;
