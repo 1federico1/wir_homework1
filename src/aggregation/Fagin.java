@@ -12,10 +12,6 @@ public class Fagin {
     private ReadFile rf;
     private static final String PATH_TO_GROUND_TRUTH = "/home/federico/Dropbox/intellij/wir_homework1/" +
             "Cranfield_DATASET/default/cran_Ground_Truth.tsv";
-    private static final String PATH_TO_BM25TEXT = "/home/federico/Dropbox/intellij/wir_homework1/" +
-            "Cranfield_DATASET/stopword_stemmer/output_bm25text.tsv";
-    private static final String PATH_TO_BM25TITLE = "/home/federico/Dropbox/intellij/wir_homework1/" +
-            "Cranfield_DATASET/stopword_stemmer/output_bm25title.tsv";
     private Map<Integer, List<Integer>> groundTruth;
 
     public Fagin() {
@@ -33,8 +29,8 @@ public class Fagin {
     public Map<Integer, Double> fagin(int queryId) {
         //k is set as the number of relevant document for the given query
         int k = this.groundTruth.get(queryId).size();
-        Map<Integer, Double> text = this.rf.getDocIdScore(PATH_TO_BM25TEXT, queryId);
-        Map<Integer, Double> title = this.rf.getDocIdScore(PATH_TO_BM25TITLE, queryId);
+        Map<Integer, Double> text = this.rf.getBm25StopwordTextRanking().get(queryId);
+        Map<Integer, Double> title = this.rf.getBm25StopwordTitleRanking().get(queryId);
         List<Integer> textDocIds = new LinkedList<>(text.keySet());
         List<Integer> titleDocIds = new LinkedList<>(title.keySet());
         //contains values seen once

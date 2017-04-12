@@ -12,10 +12,6 @@ import static data.Utility.orderMap;
  */
 public class Threshold {
 
-    private static final String PATH_TO_BM25TEXT = "/home/federico/Dropbox/intellij/wir_homework1/" +
-            "Cranfield_DATASET/stopword_stemmer/output_bm25text.tsv";
-    private static final String PATH_TO_BM25TITLE = "/home/federico/Dropbox/intellij/wir_homework1/" +
-            "Cranfield_DATASET/stopword_stemmer/output_bm25title.tsv";
     private ReadFile rf;
     private Map<Integer, List<Integer>> groundTruth;
 
@@ -33,8 +29,8 @@ public class Threshold {
 
     public Map<Integer, Double> threshold(int queryId) {
         int k = this.groundTruth.get(queryId).size();
-        Map<Integer, Double> text = this.rf.getDocIdScore(PATH_TO_BM25TEXT, queryId);
-        Map<Integer, Double> title = this.rf.getDocIdScore(PATH_TO_BM25TITLE, queryId);
+        Map<Integer, Double> text = this.rf.getBm25StopwordTextRanking().get(queryId);
+        Map<Integer, Double> title = this.rf.getBm25StopwordTitleRanking().get(queryId);
         List<Integer> textKeys = new LinkedList<>(text.keySet());
         List<Integer> titleKeys = new LinkedList<>(title.keySet());
         Map<Integer, Double> ordered = new LinkedHashMap<>();
@@ -48,7 +44,7 @@ public class Threshold {
 
             //STEP 1 : Set the Threshold to be the aggregate of the scores seen in this access
 
-            thresholdCounter = (text.get(textKeys.get(position)) + title.get(titleKeys.get(position)))*2.;
+            thresholdCounter = (text.get(textKeys.get(position)) + title.get(titleKeys.get(position))*2.);
 
             double tempScore;
             //STEP 2 : Do random accesses and compute the score of the objects seen
@@ -88,6 +84,7 @@ public class Threshold {
                     repeat = false;
 
             } else {
+
                 tempScore = text.get(textKeys.get(position)) + title.get(titleKeys.get(position))*2.;
                 tempResult.put(textKeys.get(position), tempScore);
 
@@ -96,6 +93,4 @@ public class Threshold {
         }
         return ordered;
     }
-
-
 }

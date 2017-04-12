@@ -12,7 +12,17 @@ import java.util.*;
 
 public class ReadFile {
 
+
+    private static final String PATH_TO_BM25TEXT = "/home/federico/Dropbox/intellij/wir_homework1/" +
+            "Cranfield_DATASET/stopword_stemmer/output_bm25text.tsv";
+    private static final String PATH_TO_BM25TITLE = "/home/federico/Dropbox/intellij/wir_homework1/" +
+            "Cranfield_DATASET/stopword_stemmer/output_bm25title.tsv";
+
     private Map<Integer, List<Integer>> groundTruth;
+
+    private Map<Integer, Map<Integer, Double>> bm25StopwordTextRanking;
+
+    private Map<Integer, Map<Integer, Double>> bm25StopwordTitleRanking;
 
     public Map<Integer, List<Integer>> getGroundTruth() {
         return groundTruth;
@@ -27,7 +37,7 @@ public class ReadFile {
                 "Cranfield_DATASET/default/cran_Ground_Truth.tsv");
     }
 
-    private Map<String,Map<Integer, List<Integer>>> files;
+    private Map<String, Map<Integer, List<Integer>>> files;
 
     public void init(String path) {
         Map<Integer, List<Integer>> csTextAndTitle = this.getQueryIdRetrievedDocuments(path + "output_cstt.tsv");
@@ -99,6 +109,27 @@ public class ReadFile {
         return result;
     }
 
+    public Map<Integer, Map<Integer, Double>> getQuery2ranking(String path) {
+        Map<Integer, Map<Integer, Double>> query2ranking = new LinkedHashMap<>();
+        for (String[] line : this.readFile(path)) {
+            int queryID = Integer.parseInt(line[0]);
+            if (query2ranking.containsKey(queryID)) {
+                Map<Integer, Double> docId2score = query2ranking.get(queryID);
+                int docId = Integer.parseInt(line[1]);
+                double score = Double.parseDouble(line[3]);
+                docId2score.put(docId, score);
+                query2ranking.put(queryID, docId2score);
+            } else {
+                Map<Integer, Double> docId2score = new LinkedHashMap<>();
+                int docId = Integer.parseInt(line[1]);
+                double score = Double.parseDouble(line[3]);
+                docId2score.put(docId, score);
+                query2ranking.put(queryID, docId2score);
+            }
+        }
+        return query2ranking;
+    }
+
     public Map<Integer, Double> getDocIdScore(String path, int queryId) {
         Map<Integer, Double> result = new LinkedHashMap<>();
         for (String[] line : this.readFile(path)) {
@@ -122,22 +153,17 @@ public class ReadFile {
         }
     }
 
+    public Map<Integer, Map<Integer, Double>> getBm25StopwordTextRanking() {
+        if (bm25StopwordTextRanking == null)
+            return bm25StopwordTextRanking = this.getQuery2ranking(PATH_TO_BM25TEXT);
+        else
+            return bm25StopwordTextRanking;
+    }
 
-    /**
-     * All files are named in the same way, this method returns all the files in the stemmer folder that start with the
-     * nameToSearch parameter (usually the naming convention is 'output_scorerFunctionFieldWhereIsApplied.tsv)
-     *
-     * @param pathToStemmer
-     * @return
-     */
-    public List<String> getQueryFiles(String pathToStemmer) {
-        List<String> result = new ArrayList<>();
-        File[] files = new File(pathToStemmer).listFiles();
-        for (File file : files) {
-            if (file.getName().contains("output")) {
-                result.add(file.getAbsolutePath());
-            }
-        }
-        return result;
+    public Map<Integer, Map<Integer, Double>> getBm25StopwordTitleRanking() {
+        if (bm25StopwordTitleRanking == null)
+            return bm25StopwordTitleRanking = this.getQuery2ranking(PATH_TO_BM25TITLE);
+        else
+            return bm25StopwordTitleRanking;
     }
 }
