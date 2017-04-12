@@ -81,13 +81,13 @@ public class RPrecision {
 
     public void computeValuesForAllTheStemmers() {
         System.out.println("DEFAULT STEMMER");
-        this.rf.init(Utility.PATH_DEFAULT_STEMMER);
+        this.rf.init(ReadFile.getPathDefaultStemmer());
         computeAll();
         System.out.println("ENGLISH STEMMER");
-        this.rf.init(PATH_ENGLISH_STEMMER);
+        this.rf.init(ReadFile.getPathEnglishStemmer());
         computeAll();
         System.out.println("STOPWORD STEMMER");
-        this.rf.init(PATH_STOPWORD_STEMMER);
+        this.rf.init(ReadFile.getPathStopwordStemmer());
         computeAll();
     }
 

@@ -12,6 +12,10 @@ public class Fagin {
     private ReadFile rf;
     private static final String PATH_TO_GROUND_TRUTH = "/home/federico/Dropbox/intellij/wir_homework1/" +
             "Cranfield_DATASET/default/cran_Ground_Truth.tsv";
+    private static final String PATH_TO_BM25TEXT = "/home/federico/Dropbox/intellij/wir_homework1/" +
+            "Cranfield_DATASET/stopword_stemmer/output_bm25text.tsv";
+    private static final String PATH_TO_BM25TITLE = "/home/federico/Dropbox/intellij/wir_homework1/" +
+            "Cranfield_DATASET/stopword_stemmer/output_bm25title.tsv";
     private Map<Integer, List<Integer>> groundTruth;
 
     public Fagin() {

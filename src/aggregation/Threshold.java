@@ -12,6 +12,7 @@ import static data.Utility.orderMap;
  */
 public class Threshold {
 
+
     private ReadFile rf;
     private Map<Integer, List<Integer>> groundTruth;
 
@@ -43,54 +44,56 @@ public class Threshold {
         while (position < textKeys.size() && position < titleKeys.size() && repeat) {
 
             //STEP 1 : Set the Threshold to be the aggregate of the scores seen in this access
-
-            thresholdCounter = (text.get(textKeys.get(position)) + title.get(titleKeys.get(position))*2.);
-
+            Integer textDocId = textKeys.get(position);
+            Integer titleDocId = titleKeys.get(position);
+            double textScore = text.get(textDocId);
+            double titleScore = title.get(titleDocId) * 2.;
+            thresholdCounter = textScore + titleScore;
             double tempScore;
             //STEP 2 : Do random accesses and compute the score of the objects seen
-
-            if (textKeys.get(position) != titleKeys.get(position)) {
-
-                for (Integer docId : text.keySet()) {
-                    if (title.containsKey(docId)) {
-                        tempScore = text.get(docId) + (title.get(docId) * 2);
-                        tempResult.put(docId, tempScore);
-                    } else
-                        tempScore = text.get(docId);
-                    tempResult.put(docId, tempScore);
-                }
-
-                for (Integer docId : title.keySet()) {
-                    if (text.containsKey(docId)) {
-                        tempScore = (title.get(docId) * 2) + text.get(docId);
-                        tempResult.put(docId, tempScore);
-                    } else {
-                        tempScore = title.get(docId);
-                        tempResult.put(docId, tempScore);
-                    }
+            if (textDocId != titleDocId) {
+                // check if title ranking contains the current docId of text ranking
+                if (title.containsKey(textDocId)) {
+                    tempScore = text.get(textDocId) + (title.get(textDocId) * 2.);
+                } else
+                    tempScore = text.get(textDocId);
+                tempResult.put(textDocId, tempScore);
+                // check if text ranking contains the current docId of title ranking
+                if (text.containsKey(titleDocId)) {
+                    tempScore = (title.get(titleDocId) * 2) + text.get(titleDocId);
+                    tempResult.put(titleDocId, tempScore);
+                } else {
+                    tempScore = title.get(titleDocId);
+                    tempResult.put(titleDocId, tempScore);
                 }
 
                 List<Double> scores = new LinkedList<>(tempResult.values());
                 Collections.sort(scores);
                 Collections.reverse(scores);
                 orderMap(k, tempResult, scores, ordered);
-                boolean thresholdPassed = true;
-                for (double score : ordered.values()) {
-                    if (score < thresholdCounter)
-                        thresholdPassed = false;
-                }
-
-                if (thresholdPassed)
+                boolean thresholdExceeded = isThresholdExceeded(ordered, thresholdCounter);
+                if (thresholdExceeded)
                     repeat = false;
 
-            } else {
-
-                tempScore = text.get(textKeys.get(position)) + title.get(titleKeys.get(position))*2.;
-                tempResult.put(textKeys.get(position), tempScore);
-
+            }
+            //same rank for the current docID
+            else {
+                tempScore = textScore + titleScore;
+                tempResult.put(textDocId, tempScore);
             }
             position++;
         }
         return ordered;
     }
+
+    private boolean isThresholdExceeded(Map<Integer, Double> ordered, double thresholdCounter) {
+        boolean thresholdPassed = true;
+        for (double score : ordered.values()) {
+            if (score < thresholdCounter)
+                thresholdPassed = false;
+        }
+        return thresholdPassed;
+    }
+
+
 }

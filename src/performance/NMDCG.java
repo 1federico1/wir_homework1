@@ -5,6 +5,10 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+
+import static data.ReadFile.getPathDefaultStemmer;
+import static data.ReadFile.getPathEnglishStemmer;
+import static data.ReadFile.getPathStopwordStemmer;
 import static data.Utility.*;
 
 /**
@@ -66,13 +70,13 @@ public class NMDCG {
 
     public void computeValuesForAllTheStemmers(int... val) {
         System.out.println("DEFAULT STEMMER");
-        this.rf.init(PATH_DEFAULT_STEMMER);
+        this.rf.init(getPathDefaultStemmer());
         computeAllK(val);
-        System.out.println("ENGLISH STEMMER");
-        this.rf.init(PATH_ENGLISH_STEMMER);
+        System.out.println("eNGLISH STEMMER");
+        this.rf.init(getPathEnglishStemmer());
         computeAllK(val);
         System.out.println("STOPWORD STEMMER");
-        this.rf.init(PATH_STOPWORD_STEMMER);
+        this.rf.init(getPathStopwordStemmer());
         computeAllK(val);
     }
 

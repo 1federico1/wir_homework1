@@ -166,4 +166,16 @@ public class ReadFile {
         else
             return bm25StopwordTitleRanking;
     }
+
+    public static String getPathDefaultStemmer() {
+        return PATH_DEFAULT_STEMMER;
+    }
+
+    public static String getPathEnglishStemmer() {
+        return PATH_ENGLISH_STEMMER;
+    }
+
+    public static String getPathStopwordStemmer() {
+        return PATH_STOPWORD_STEMMER;
+    }
 }

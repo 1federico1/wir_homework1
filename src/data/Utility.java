@@ -8,12 +8,7 @@ import java.util.Map;
  */
 public class Utility {
 
-    public static final String PATH_DEFAULT_STEMMER = "/home/federico/Dropbox/intellij/wir_homework1/" +
-            "Cranfield_DATASET/default/";
-    public static final String PATH_ENGLISH_STEMMER = "/home/federico/Dropbox/intellij/wir_homework1/" +
-                    "Cranfield_DATASET/stemmer/";
-    public static final String PATH_STOPWORD_STEMMER = "/home/federico/Dropbox/intellij/wir_homework1/" +
-                            "Cranfield_DATASET/stopword_stemmer/";
+
 
     public static void orderMap(int k, Map<Integer, Double> result, List<Double> scores, Map<Integer, Double> ordered) {
         //rebuilds the map corresponding to the top k scores
