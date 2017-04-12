@@ -1,26 +1,17 @@
 package performance;
 
 import data.ReadFile;
-import data.Utility;
-
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Logger;
+import static data.Utility.*;
 
 /**
  * Created by federico on 4/3/17.
  */
 public class NMDCG {
     private ReadFile rf;
-
-    private static final String PATH_DEFAULT_STEMMER = "/home/federico/Dropbox/intellij/wir_homework1/" +
-            "Cranfield_DATASET/default/";
-    private static final String PATH_ENGLISH_STEMMER = "/home/federico/Dropbox/intellij/wir_homework1/" +
-            "Cranfield_DATASET/stemmer/";
-    private static final String PATH_STOPWORD_STEMMER = "/home/federico/Dropbox/intellij/wir_homework1/" +
-            "Cranfield_DATASET/stopword_stemmer/";
 
     public NMDCG() {
         this.rf = new ReadFile();
@@ -30,14 +21,14 @@ public class NMDCG {
         List<Integer> relevantDocuments = this.rf.getGroundTruth().get(queryId);
         List<Integer> retrievedDocuments = map.get(queryId);
         /*get(0), poi get(i) partendo da 2, saltiamo il get(1)!*/
-        double mdcg = Utility.relevance(retrievedDocuments.get(0), relevantDocuments);
+        double mdcg = relevance(retrievedDocuments.get(0), relevantDocuments);
         double logBaseTwoK = Math.log10(k) / Math.log(2.);
         double maximumMdcg = 1.;
         if (k > 1) {
             int i = 1;
             /* < oppure <= ? */
             while (i < k) {
-                mdcg += Utility.relevance(retrievedDocuments.get(i), relevantDocuments) / logBaseTwoK;
+                mdcg += relevance(retrievedDocuments.get(i), relevantDocuments) / logBaseTwoK;
                 i++;
             }
 

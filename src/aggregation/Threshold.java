@@ -1,8 +1,11 @@
 package aggregation;
 
 import data.ReadFile;
+import data.Utility;
 
 import java.util.*;
+
+import static data.Utility.orderMap;
 
 /**
  * Created by federico on 4/9/17.
@@ -28,14 +31,12 @@ public class Threshold {
         List<Integer> titleKeys = new LinkedList<>(title.keySet());
         Map<Integer, Double> ordered = new LinkedHashMap<>();
         Map<Integer, Double> tempResult = new HashMap<>();
+
         int position = 0;
         double thresholdCounter;
         boolean repeat = true;
 
-
-
-
-        while(position <= text.keySet().size() && repeat){
+        while(position < textKeys.size() && position < titleKeys.size() && repeat){
 
             //STEP 1 : Set the Threshold to be the aggregate of the scores seen in this access
 
@@ -70,7 +71,7 @@ public class Threshold {
                 List<Double> scores = new LinkedList<>(tempResult.values());
                 Collections.sort(scores);
                 Collections.reverse(scores);
-                Utility.orderMap(k, tempResult, scores, ordered);
+                orderMap(k, tempResult, scores, ordered);
                 boolean thresholdPassed = true;
                 for(double score : ordered.values()){
                     if(score < thresholdCounter)
@@ -91,13 +92,6 @@ public class Threshold {
         return ordered;
     }
 
-    public void printResult(Map<Integer, Double> results, int queryId) {
-        System.out.println("QUERY\tDOC_ID\tRANK\tSCORE");
-        int rank=1;
-        for(int docId : results.keySet()) {
-            System.out.println(queryId+"\t"+docId+"\t"+rank+"\t"+results.get(docId));
-            rank++;
-        }
-    }
+
 
 }

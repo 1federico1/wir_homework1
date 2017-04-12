@@ -6,7 +6,8 @@ import data.Utility;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Logger;
+
+import static data.Utility.*;
 
 /**
  * R-Precision: Requires a set of known relevant documents Rel, from which we calculate the precision of the top Rel
@@ -15,12 +16,6 @@ import java.util.logging.Logger;
  */
 public class RPrecision {
     private ReadFile rf;
-    private static final String PATH_DEFAULT_STEMMER = "/home/federico/Dropbox/intellij/wir_homework1/" +
-            "Cranfield_DATASET/default/";
-    private static final String PATH_ENGLISH_STEMMER = "/home/federico/Dropbox/intellij/wir_homework1/" +
-            "Cranfield_DATASET/stemmer/";
-    private static final String PATH_STOPWORD_STEMMER = "/home/federico/Dropbox/intellij/wir_homework1/" +
-            "Cranfield_DATASET/stopword_stemmer/";
 
     public RPrecision() {
         this.rf = new ReadFile();
@@ -45,7 +40,7 @@ public class RPrecision {
          */
         double numberOfRetrievedDocuments = 0.;
         for (int docId : retrievedDocuments) {
-            numberOfRetrievedDocuments += Utility.relevance(docId, relevantDocuments);
+            numberOfRetrievedDocuments += relevance(docId, relevantDocuments);
         }
         if (numberOfRelevantDocuments == 0.)
             return 0.;
@@ -86,7 +81,7 @@ public class RPrecision {
 
     public void computeValuesForAllTheStemmers() {
         System.out.println("DEFAULT STEMMER");
-        this.rf.init(PATH_DEFAULT_STEMMER);
+        this.rf.init(Utility.PATH_DEFAULT_STEMMER);
         computeAll();
         System.out.println("ENGLISH STEMMER");
         this.rf.init(PATH_ENGLISH_STEMMER);

@@ -23,8 +23,11 @@ public class Fagin {
         this.groundTruth = this.rf.getQueryIdRetrievedDocuments(PATH_TO_GROUND_TRUTH);
     }
 
-    public Map<Integer, Double> getDocId2ScoreForSingleQuery(int queryId) {
-        return this.rf.getDocIdScore(PATH_TO_BM25TEXT, queryId);
+    public void computeFaginForAllTheQueries() {
+        System.out.println("QUERY\tDOC_ID\tRANK\tSCORE");
+        for(int queryId : this.groundTruth.keySet()) {
+            Utility.printResult(this.fagin(queryId), queryId);
+        }
     }
 
     public Map<Integer, Double> fagin(int queryId) {
@@ -43,8 +46,8 @@ public class Fagin {
         Map<Integer, Double> result = new HashMap<>();
         int found = 0;
         int position = 0;
-        //rankings have same size
-        while (found < k && position <= text.keySet().size()) {
+
+        while (found < k && position < textDocIds.size() && position < titleDocIds.size()) {
             //current element of the text ranking
             int textDocId = textDocIds.get(position);
             //the current value was seen previously
@@ -102,14 +105,5 @@ public class Fagin {
         return ordered;
     }
 
-
-    public void printResult(Map<Integer, Double> results, int queryId) {
-        System.out.println("QUERY\tDOC_ID\tRANK\tSCORE");
-        int rank=1;
-        for(int docId : results.keySet()) {
-            System.out.println(queryId+"\t"+docId+"\t"+rank+"\t"+results.get(docId));
-            rank++;
-        }
-    }
 }
 
