@@ -24,7 +24,7 @@ public class Main {
         rp.computeValuesForAllTheStemmers();
         System.out.println("FAGIN");
         Fagin f = new Fagin();
-        Map<Integer, Double> output = f.fagin(1, 21);
+        Map<Integer, Double> output = f.fagin(1);
         f.printResult(output, 1);
         System.out.println("THRESHOLD");
         Threshold t = new Threshold();

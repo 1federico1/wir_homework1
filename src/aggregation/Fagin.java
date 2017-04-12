@@ -27,46 +27,49 @@ public class Fagin {
         return this.rf.getDocIdScore(PATH_TO_BM25TEXT, queryId);
     }
 
-    public Map<Integer, Double> fagin(int queryId, int k) {
+    public Map<Integer, Double> fagin(int queryId) {
+        int k = this.groundTruth.get(queryId).size();
         Map<Integer, Double> text = this.rf.getDocIdScore(PATH_TO_BM25TEXT, queryId);
         Map<Integer, Double> title = this.rf.getDocIdScore(PATH_TO_BM25TITLE, queryId);
         List<Double> textScores = new LinkedList<>(text.values());
         List<Double> titleScores = new LinkedList<>(title.values());
-        List<Integer> textKeys = new LinkedList<>(text.keySet());
-        List<Integer> titleKeys = new LinkedList<>(title.keySet());
+        List<Integer> textDocIds = new LinkedList<>(text.keySet());
+        List<Integer> titleDocIds = new LinkedList<>(title.keySet());
+        //contains values seen once
         Map<Integer, Double> seen = new LinkedHashMap<>();
+        //contains values seen from text ranking
         Map<Integer, Double> textSeen = new HashMap<>();
+        //contains values seen from title ranking
         Map<Integer, Double> titleSeen = new HashMap<>();
         Map<Integer, Double> result = new HashMap<>();
         int found = 0;
         int position = 0;
-
+        //rankings have same size
         while (found < k && position <= text.keySet().size()) {
-
-            if (seen.keySet().contains(textKeys.get(position))) {
-                System.out.println("found in text " + textKeys.get(position));
+            if (seen.keySet().contains(textDocIds.get(position))) {
+                System.out.println("found in text " + textDocIds.get(position));
                 found++;
-                System.out.println(textKeys.get(position)+" = " +textScores.get(position));
-                result.put(textKeys.get(position), textScores.get(position) + title.get(textKeys.get(position)) * 2.);
-                seen.remove(textKeys.get(position));
+                System.out.println(textDocIds.get(position)+" = " +textScores.get(position));
+                result.put(textDocIds.get(position), textScores.get(position) + title.get(textDocIds.get(position)) * 2.);
+                seen.remove(textDocIds.get(position));
             } else {
-                System.out.println("seen in text " + textKeys.get(position));
-                System.out.println(titleKeys.get(position)+" = " +titleScores.get(position));
+                System.out.println("seen in text " + textDocIds.get(position));
+                System.out.println(titleDocIds.get(position)+" = " +titleScores.get(position));
 
-                seen.put(textKeys.get(position), textScores.get(position));
-                textSeen.put(textKeys.get(position), textScores.get(position));
+                seen.put(textDocIds.get(position), textScores.get(position));
+                textSeen.put(textDocIds.get(position), textScores.get(position));
             }
 
-            if (seen.keySet().contains(titleKeys.get(position))) {
-                System.out.println("found in title " + titleKeys.get(position));
-                result.put(titleKeys.get(position), titleScores.get(position)*2. + text.get(titleKeys.get(position)));
-                seen.remove(titleKeys.get(position));
+            if (seen.keySet().contains(titleDocIds.get(position))) {
+                System.out.println("found in title " + titleDocIds.get(position));
+                result.put(titleDocIds.get(position), titleScores.get(position)*2. + text.get(titleDocIds.get(position)));
+                seen.remove(titleDocIds.get(position));
                 found++;
 
             } else {
-                System.out.println("seen in title " + titleKeys.get(position));
-                seen.put(titleKeys.get(position), titleScores.get(position));
-                titleSeen.put(titleKeys.get(position), titleScores.get(position));
+                System.out.println("seen in title " + titleDocIds.get(position));
+                seen.put(titleDocIds.get(position), titleScores.get(position));
+                titleSeen.put(titleDocIds.get(position), titleScores.get(position));
             }
             position++;
 
