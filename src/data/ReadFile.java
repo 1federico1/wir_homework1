@@ -13,16 +13,11 @@ import java.util.*;
 public class ReadFile {
 
 
-    private static final String PATH_TO_BM25TEXT = "/home/federico/Dropbox/intellij/wir_homework1/" +
-            "Cranfield_DATASET/stopword_stemmer/output_bm25text.tsv";
-    private static final String PATH_TO_BM25TITLE = "/home/federico/Dropbox/intellij/wir_homework1/" +
-            "Cranfield_DATASET/stopword_stemmer/output_bm25title.tsv";
-    private static final String PATH_DEFAULT_STEMMER = "/home/federico/Dropbox/intellij/wir_homework1/" +
-            "Cranfield_DATASET/default/";
-    private static final String PATH_ENGLISH_STEMMER = "/home/federico/Dropbox/intellij/wir_homework1/" +
-            "Cranfield_DATASET/stemmer/";
-    private static final String PATH_STOPWORD_STEMMER = "/home/federico/Dropbox/intellij/wir_homework1/" +
-            "Cranfield_DATASET/stopword_stemmer/";
+    private static final String PATH_TO_BM25TEXT = "/home/alessandro/Scrivania/Uni/WIR/HW1/Cranfield_DATASET/Cranfield_DATASET/stopwords/results/output_cran__BM25__text.tsv";
+    private static final String PATH_TO_BM25TITLE = "/home/alessandro/Scrivania/Uni/WIR/HW1/Cranfield_DATASET/Cranfield_DATASET/stopwords/results/output_cran__BM25__title.tsv";
+    private static final String PATH_DEFAULT_STEMMER = "/home/alessandro/Scrivania/Uni/WIR/HW1/Cranfield_DATASET/Cranfield_DATASET/default";
+    private static final String PATH_ENGLISH_STEMMER = "/home/alessandro/Scrivania/Uni/WIR/HW1/Cranfield_DATASET/Cranfield_DATASET/english";
+    private static final String PATH_STOPWORD_STEMMER = "/home/alessandro/Scrivania/Uni/WIR/HW1/Cranfield_DATASET/Cranfield_DATASET/stopwords";
 
     private Map<Integer, List<Integer>> groundTruth;
 
@@ -39,22 +34,21 @@ public class ReadFile {
     }
 
     public ReadFile() {
-        this.groundTruth = this.getQueryIdRetrievedDocuments("/home/federico/Dropbox/intellij/wir_homework1/" +
-                "Cranfield_DATASET/default/cran_Ground_Truth.tsv");
+        this.groundTruth = this.getQueryIdRetrievedDocuments("/home/alessandro/Scrivania/Uni/WIR/HW1/Cranfield_DATASET/Cranfield_DATASET/cran_Ground_Truth.tsv");
     }
 
     private Map<String, Map<Integer, List<Integer>>> files;
 
     public void init(String path) {
-        Map<Integer, List<Integer>> csTextAndTitle = this.getQueryIdRetrievedDocuments(path + "output_cstt.tsv");
-        Map<Integer, List<Integer>> csText = this.getQueryIdRetrievedDocuments(path + "output_cstext.tsv");
-        Map<Integer, List<Integer>> csTitle = this.getQueryIdRetrievedDocuments(path + "output_cstitle.tsv");
-        Map<Integer, List<Integer>> tfidfTextAndTitle = this.getQueryIdRetrievedDocuments(path + "output_tfidftt.tsv");
-        Map<Integer, List<Integer>> tfidfText = this.getQueryIdRetrievedDocuments(path + "output_tfidftext.tsv");
-        Map<Integer, List<Integer>> tfidfTitle = this.getQueryIdRetrievedDocuments(path + "output_tfidftitle.tsv");
-        Map<Integer, List<Integer>> bm25TextAndTitle = this.getQueryIdRetrievedDocuments(path + "output_bm25tt.tsv");
-        Map<Integer, List<Integer>> bm25Text = this.getQueryIdRetrievedDocuments(path + "output_bm25text.tsv");
-        Map<Integer, List<Integer>> bm25Title = this.getQueryIdRetrievedDocuments(path + "output_bm25title.tsv");
+        Map<Integer, List<Integer>> csTextAndTitle = this.getQueryIdRetrievedDocuments(path + "/results/output_cran__CountScorer__texttitle.tsv");
+        Map<Integer, List<Integer>> csText = this.getQueryIdRetrievedDocuments(path + "/results/output_cran__CountScorer__text.tsv");
+        Map<Integer, List<Integer>> csTitle = this.getQueryIdRetrievedDocuments(path + "/results/output_cran__CountScorer__title.tsv");
+        Map<Integer, List<Integer>> tfidfTextAndTitle = this.getQueryIdRetrievedDocuments(path + "/results/output_cran__TfIdf__texttitle.tsv");
+        Map<Integer, List<Integer>> tfidfText = this.getQueryIdRetrievedDocuments(path + "/results/output_cran__TfIdf__text.tsv");
+        Map<Integer, List<Integer>> tfidfTitle = this.getQueryIdRetrievedDocuments(path + "/results/output_cran__TfIdf__title.tsv");
+        Map<Integer, List<Integer>> bm25TextAndTitle = this.getQueryIdRetrievedDocuments(path + "/results/output_cran__BM25__texttitle.tsv");
+        Map<Integer, List<Integer>> bm25Text = this.getQueryIdRetrievedDocuments(path + "/results/output_cran__BM25__text.tsv");
+        Map<Integer, List<Integer>> bm25Title = this.getQueryIdRetrievedDocuments(path + "/results/output_cran__BM25__title.tsv");
         this.files = new LinkedHashMap<>();
         this.files.put("csTextAndTitle", csTextAndTitle);
         this.files.put("csText", csText);

@@ -10,13 +10,12 @@ import java.util.*;
  */
 public class Fagin {
     private ReadFile rf;
-    private static final String PATH_TO_GROUND_TRUTH = "/home/federico/Dropbox/intellij/wir_homework1/" +
-            "Cranfield_DATASET/default/cran_Ground_Truth.tsv";
+
     private Map<Integer, List<Integer>> groundTruth;
 
     public Fagin() {
         this.rf = new ReadFile();
-        this.groundTruth = this.rf.getQueryIdRetrievedDocuments(PATH_TO_GROUND_TRUTH);
+        this.groundTruth = this.rf.getGroundTruth();
     }
 
     public void computeFaginForAllTheQueries() {
