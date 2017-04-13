@@ -1,6 +1,7 @@
 package performance;
 
 import data.ReadFile;
+
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -22,27 +23,35 @@ public class NMDCG {
     }
 
     public double computeSingleQuery(Map<Integer, List<Integer>> map, int queryId, int k) {
-        List<Integer> relevantDocuments = this.rf.getGroundTruth().get(queryId);
+        /*Nel caso in cui groundTruth restituisca un numero di documenti inferiore a k*/
+        int cut = Math.min(k, this.rf.getGroundTruth().get(queryId).size());
+        List<Integer> relevantDocuments = this.rf.getGroundTruth().get(queryId).subList(0, cut);
         List<Integer> retrievedDocuments = map.get(queryId);
-        /*get(0), poi get(i) partendo da 2, saltiamo il get(1)!*/
-        double mdcg = relevance(retrievedDocuments.get(0), relevantDocuments);
-        double logBaseTwoK = Math.log10(k) / Math.log10(2.);
-        double maximumMdcg = 1.;
-        if (k > 1) {
-            int i = 1;
-            /* < oppure <= ? */
-            while (i < k) {
-                mdcg += relevance(retrievedDocuments.get(i), relevantDocuments) / logBaseTwoK;
-                i++;
-            }
 
-            for (int j = 2; j <= k; j++) {
-                double log = Math.log10(j) / Math.log10(2.);
-                maximumMdcg += 1. / log;
-            }
+        double mdcg = relevance(retrievedDocuments.get(0), relevantDocuments);
+        double maximumMdcg = 1.;
+
+        if (cut > 1) {
+            int i = 1;
+                while (i < cut) {
+                    double logBaseTwoK = Math.log10(i+1) / Math.log10(2.);
+                    mdcg += (relevance(retrievedDocuments.get(i), relevantDocuments) / logBaseTwoK);
+                    i++;
+                }
+            maximumMdcg = getMaximumMdcg(queryId, cut);
         }
+
         return mdcg / maximumMdcg;
 
+    }
+
+    private double getMaximumMdcg(int queryId, int cut) {
+        double maximumMdcg = 1.;
+        for (int j = 2; j <= cut; j++) {
+            double log = Math.log10(j) / Math.log10(2.);
+            maximumMdcg += 1. / log;
+        }
+        return maximumMdcg;
     }
 
     private Map<String, Double> computeSingleKForAllFiles(int k) {
@@ -53,6 +62,7 @@ public class NMDCG {
                 double nmdcg = this.computeSingleQuery(this.rf.getFiles().get(file), queryId, k);
                 queryId2nmdcg.put(queryId, nmdcg);
             }
+
             double mean = this.getMean(queryId2nmdcg);
             results.put(file, mean);
             System.out.println(file + " = " + mean);
@@ -69,9 +79,8 @@ public class NMDCG {
     }
 
 
-
     public void computeValuesForAllTheStemmers() {
-        int[] val = new int[]{1,3,5,10};
+        int[] val = new int[]{1, 3, 5, 10};
         System.out.println("DEFAULT STEMMER");
         this.rf.init(getPathDefaultStemmer());
         computeAllK(val);

@@ -15,7 +15,7 @@ public class Main {
         System.out.println("NMDCG");
         NMDCG NMDCG = new NMDCG();
         NMDCG.computeValuesForAllTheStemmers();
-        System.out.println("RPRECISION")
+        System.out.println("RPRECISION");
         RPrecision rp = new RPrecision();
         rp.computeValuesForAllTheStemmers();
         System.out.println("FAGIN");
