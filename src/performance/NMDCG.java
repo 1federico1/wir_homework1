@@ -26,7 +26,7 @@ public class NMDCG {
         List<Integer> retrievedDocuments = map.get(queryId);
         /*get(0), poi get(i) partendo da 2, saltiamo il get(1)!*/
         double mdcg = relevance(retrievedDocuments.get(0), relevantDocuments);
-        double logBaseTwoK = Math.log10(k) / Math.log(2.);
+        double logBaseTwoK = Math.log10(k) / Math.log10(2.);
         double maximumMdcg = 1.;
         if (k > 1) {
             int i = 1;
@@ -37,7 +37,7 @@ public class NMDCG {
             }
 
             for (int j = 2; j <= k; j++) {
-                double log = Math.log10(j) / Math.log(2.);
+                double log = Math.log10(j) / Math.log10(2.);
                 maximumMdcg += 1. / log;
             }
         }
