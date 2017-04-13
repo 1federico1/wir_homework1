@@ -1,7 +1,6 @@
 package aggregation;
 
 import data.ReadFile;
-import data.Utility;
 
 import java.util.*;
 
@@ -10,7 +9,7 @@ import static data.Utility.orderMap;
 /**
  * Created by federico on 4/9/17.
  */
-public class Threshold {
+public class Threshold extends Aggregation {
 
 
     private ReadFile rf;
@@ -21,12 +20,8 @@ public class Threshold {
         this.groundTruth = this.rf.getGroundTruth();
     }
 
-    public Map<Integer, Map<Integer, Double>> compute() {
-        Map<Integer, Map<Integer, Double>> result = new LinkedHashMap<>();
-        return result;
-    }
-
-    public Map<Integer, Double> threshold(int queryId) {
+    @Override
+    public Map<Integer, Double> aggregate(int queryId) {
         int k = this.groundTruth.get(queryId).size();
         Map<Integer, Double> text = this.rf.getBm25StopwordTextRanking().get(queryId);
         Map<Integer, Double> title = this.rf.getBm25StopwordTitleRanking().get(queryId);
@@ -65,14 +60,10 @@ public class Threshold {
                     tempResult.put(titleDocId, tempScore);
                 }
 
-                List<Double> scores = new LinkedList<>(tempResult.values());
-                Collections.sort(scores);
-                Collections.reverse(scores);
+                List<Double> scores = super.getSortedListOfValues(tempResult);
                 orderMap(k, tempResult, scores, ordered);
-                boolean thresholdExceeded = isThresholdExceeded(ordered, thresholdCounter);
-                if (thresholdExceeded)
+                if (isThresholdExceeded(ordered, thresholdCounter))
                     repeat = false;
-
             }
             //same rank for the current docID
             else {

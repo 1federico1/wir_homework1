@@ -1,6 +1,5 @@
 package aggregation;
 
-import data.ReadFile;
 import data.Utility;
 
 import java.util.*;
@@ -8,27 +7,13 @@ import java.util.*;
 /**
  * Created by federico on 4/9/17.
  */
-public class Fagin {
-    private ReadFile rf;
-    private static final String PATH_TO_GROUND_TRUTH = "/home/federico/Dropbox/intellij/wir_homework1/" +
-            "Cranfield_DATASET/default/cran_Ground_Truth.tsv";
-    private Map<Integer, List<Integer>> groundTruth;
+public class Fagin extends Aggregation{
 
     public Fagin() {
-        this.rf = new ReadFile();
-        this.groundTruth = this.rf.getQueryIdRetrievedDocuments(PATH_TO_GROUND_TRUTH);
     }
 
-    public Map<Integer, Map<Integer, Double>> compute() {
-        Map<Integer, Map<Integer, Double>> result = new LinkedHashMap<>();
-        for(int queryId : this.groundTruth.keySet()) {
-            Map<Integer, Double> tmp = this.fagin(queryId);
-            result.put(queryId, tmp);
-        }
-        return result;
-    }
-
-    public Map<Integer, Double> fagin(int queryId) {
+    @Override
+    public Map<Integer, Double> aggregate(int queryId) {
         //k is set as the number of relevant document for the given query
         int k = this.groundTruth.get(queryId).size();
         Map<Integer, Double> text = this.rf.getBm25StopwordTextRanking().get(queryId);
@@ -96,9 +81,7 @@ public class Fagin {
                 result.put(docId, textScore + titleScore);
             }
         }
-        List<Double> scores = new LinkedList<>(result.values());
-        Collections.sort(scores);
-        Collections.reverse(scores);
+        List<Double> scores = super.getSortedListOfValues(result);
         Map<Integer, Double> ordered = new LinkedHashMap<>();
         Utility.orderMap(k, result, scores, ordered);
         return ordered;

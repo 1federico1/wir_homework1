@@ -21,7 +21,7 @@ public class Main {
         System.out.println("THRESHOLD");
         Threshold t = new Threshold();
         WriteFile wf = new WriteFile();
-        wf.writeFile(pathToResults+"/fagin.tsv", f.compute());
-        wf.writeFile(pathToResults+"/threshold.tsv",t.compute());
+        wf.writeFile(pathToResults+"/aggregate.tsv", f.compute());
+        wf.writeFile(pathToResults+"/aggregate.tsv",t.compute());
     }
 }
