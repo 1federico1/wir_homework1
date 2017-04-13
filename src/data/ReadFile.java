@@ -150,7 +150,9 @@ public class ReadFile {
                 documents.add(relevantDocId);
             map.put(queryId, documents);
         } else {
-            map.put(queryId, new ArrayList<>(relevantDocId));
+            List<Integer> list = new LinkedList<>();
+            list.add(relevantDocId);
+            map.put(queryId, list);
         }
     }
 

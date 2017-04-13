@@ -30,4 +30,19 @@ public abstract class Aggregation {
         return scores;
     }
 
+    Map<Integer, Double> orderMap(int k, Map<Integer, Double> result, List<Double> scores) {
+        //rebuilds the map corresponding to the top k scores
+        int i = 0;
+        Map<Integer, Double> ordered = new LinkedHashMap<>();
+        for(double score : scores) {
+            for(int key : result.keySet()) {
+                if(score == result.get(key) && i < k) {
+                    ordered.put(key, score);
+                    i++;
+                }
+            }
+        }
+        return ordered;
+    }
+
 }

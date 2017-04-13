@@ -1,8 +1,10 @@
 package aggregation;
 
-import data.Utility;
-
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by federico on 4/9/17.
@@ -82,9 +84,7 @@ public class Fagin extends Aggregation{
             }
         }
         List<Double> scores = super.getSortedListOfValues(result);
-        Map<Integer, Double> ordered = new LinkedHashMap<>();
-        Utility.orderMap(k, result, scores, ordered);
-        return ordered;
+        return super.orderMap(k, result, scores);
     }
 
 }

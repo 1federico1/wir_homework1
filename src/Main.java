@@ -1,8 +1,12 @@
 import aggregation.Fagin;
 import aggregation.Threshold;
+import data.ReadFile;
 import data.WriteFile;
 import performance.NMDCG;
 import performance.RPrecision;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by federico on 4/1/17.
@@ -21,7 +25,8 @@ public class Main {
         System.out.println("THRESHOLD");
         Threshold t = new Threshold();
         WriteFile wf = new WriteFile();
-        wf.writeFile(pathToResults+"/aggregate.tsv", f.compute());
+        wf.writeFile(pathToResults+"/fagin.tsv", f.compute());
         wf.writeFile(pathToResults+"/aggregate.tsv",t.compute());
+
     }
 }

@@ -1,10 +1,11 @@
 package aggregation;
 
 import data.ReadFile;
-
-import java.util.*;
-
-import static data.Utility.orderMap;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by federico on 4/9/17.
@@ -61,7 +62,7 @@ public class Threshold extends Aggregation {
                 }
 
                 List<Double> scores = super.getSortedListOfValues(tempResult);
-                orderMap(k, tempResult, scores, ordered);
+                ordered = super.orderMap(k, tempResult, scores);
                 if (isThresholdExceeded(ordered, thresholdCounter))
                     repeat = false;
             }
