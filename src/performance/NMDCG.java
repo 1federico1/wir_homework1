@@ -18,7 +18,7 @@ public class NMDCG {
     private ReadFile rf;
 
     public NMDCG() {
-        this.rf = new ReadFile();
+        this.rf = ReadFile.getInstance();
     }
 
     public double computeSingleQuery(Map<Integer, List<Integer>> map, int queryId, int k) {
@@ -68,7 +68,10 @@ public class NMDCG {
         return mean / (double) result.keySet().size();
     }
 
-    public void computeValuesForAllTheStemmers(int... val) {
+
+
+    public void computeValuesForAllTheStemmers() {
+        int[] val = new int[]{1,3,5,10};
         System.out.println("DEFAULT STEMMER");
         this.rf.init(getPathDefaultStemmer());
         computeAllK(val);

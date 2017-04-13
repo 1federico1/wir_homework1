@@ -19,13 +19,6 @@ public class Fagin {
         this.groundTruth = this.rf.getQueryIdRetrievedDocuments(PATH_TO_GROUND_TRUTH);
     }
 
-    public void computeFaginForAllTheQueries() {
-        System.out.println("QUERY\tDOC_ID\tRANK\tSCORE");
-        for(int queryId : this.groundTruth.keySet()) {
-            Utility.printResult(this.fagin(queryId), queryId);
-        }
-    }
-
     public Map<Integer, Map<Integer, Double>> compute() {
         Map<Integer, Map<Integer, Double>> result = new LinkedHashMap<>();
         for(int queryId : this.groundTruth.keySet()) {

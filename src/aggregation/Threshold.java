@@ -21,11 +21,9 @@ public class Threshold {
         this.groundTruth = this.rf.getGroundTruth();
     }
 
-    public void computeThresholdForAllTheQueries() {
-        System.out.println("QUERY\tDOC_ID\tRANK\tSCORE");
-        for (int queryId : this.groundTruth.keySet()) {
-            Utility.printResult(this.threshold(queryId), queryId);
-        }
+    public Map<Integer, Map<Integer, Double>> compute() {
+        Map<Integer, Map<Integer, Double>> result = new LinkedHashMap<>();
+        return result;
     }
 
     public Map<Integer, Double> threshold(int queryId) {

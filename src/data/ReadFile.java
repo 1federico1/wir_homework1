@@ -1,7 +1,7 @@
 package data;
 
 import java.io.BufferedReader;
-import java.io.File;
+
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
@@ -12,6 +12,7 @@ import java.util.*;
 
 public class ReadFile {
 
+    private static ReadFile instance = null;
 
     private static final String PATH_TO_BM25TEXT = "/home/federico/Dropbox/intellij/wir_homework1/" +
             "Cranfield_DATASET/stopword_stemmer/output_bm25text.tsv";
@@ -41,6 +42,12 @@ public class ReadFile {
     public ReadFile() {
         this.groundTruth = this.getQueryIdRetrievedDocuments("/home/federico/Dropbox/intellij/wir_homework1/" +
                 "Cranfield_DATASET/default/cran_Ground_Truth.tsv");
+    }
+
+    public static ReadFile getInstance() {
+        if (instance == null)
+                instance = new ReadFile();
+        return instance;
     }
 
     private Map<String, Map<Integer, List<Integer>>> files;
@@ -134,18 +141,6 @@ public class ReadFile {
             }
         }
         return query2ranking;
-    }
-
-    public Map<Integer, Double> getDocIdScore(String path, int queryId) {
-        Map<Integer, Double> result = new LinkedHashMap<>();
-        for (String[] line : this.readFile(path)) {
-            if (queryId == Integer.parseInt(line[0])) {
-                int docId = Integer.parseInt(line[1]);
-                double score = Double.parseDouble(line[3]);
-                result.put(docId, score);
-            }
-        }
-        return result;
     }
 
     private void checkMap(Map<Integer, List<Integer>> map, int queryId, int relevantDocId) {

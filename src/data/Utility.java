@@ -27,11 +27,5 @@ public class Utility {
         } else
             return 0;
     }
-    public static void printResult(Map<Integer, Double> results, int queryId) {
-        int rank=1;
-        for(int docId : results.keySet()) {
-            System.out.println(queryId+"\t"+docId+"\t"+rank+"\t"+results.get(docId));
-            rank++;
-        }
-    }
+
 }

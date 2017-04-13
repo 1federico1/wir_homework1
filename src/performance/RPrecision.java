@@ -1,8 +1,6 @@
 package performance;
 
 import data.ReadFile;
-import data.Utility;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,7 +16,7 @@ public class RPrecision {
     private ReadFile rf;
 
     public RPrecision() {
-        this.rf = new ReadFile();
+        this.rf = ReadFile.getInstance();
     }
 
     /**
