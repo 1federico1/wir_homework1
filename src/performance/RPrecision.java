@@ -1,9 +1,8 @@
 package performance;
 
 import data.ReadFile;
-import data.Utility;
-
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -18,7 +17,7 @@ public class RPrecision {
     private ReadFile rf;
 
     public RPrecision() {
-        this.rf = new ReadFile();
+        this.rf = ReadFile.getInstance();
     }
 
     /**
@@ -34,12 +33,17 @@ public class RPrecision {
         /*
         Cutoff the list of returned documents at the position indicated by the size of the relevant documents set.
          */
-        retrievedDocuments = retrievedDocuments.subList(0, (int)numberOfRelevantDocuments);
+       // System.out.println(queryId+" = "+retrievedDocuments+"-"+numberOfRelevantDocuments);
+        int min = Math.min(retrievedDocuments.size(), relevantDocuments.size());
+        List<Integer> cutOff = new LinkedList();
+        for(int i = 1; i <= min; i++)
+            cutOff.add(retrievedDocuments.get(i-1));
+        //retrievedDocuments = retrievedDocuments.subList(0, (int)numberOfRelevantDocuments);
         /*
         For each retrieved document check if it is present in the relevant document set
          */
         double numberOfRetrievedDocuments = 0.;
-        for (int docId : retrievedDocuments) {
+        for (int docId : cutOff) {
             numberOfRetrievedDocuments += relevance(docId, relevantDocuments);
         }
         if (numberOfRelevantDocuments == 0.)
@@ -56,7 +60,7 @@ public class RPrecision {
      *
      * @return the average of all the R-precisions computed among the retrieved documents.
      */
-    private double averageRPrecision(Map<Integer, List<Integer>> map) {
+    public double averageRPrecision(Map<Integer, List<Integer>> map) {
         double count = 0.0;
         for (int queryId : this.rf.getGroundTruth().keySet()) {
             count += this.computeSingleQuery(map, queryId);
