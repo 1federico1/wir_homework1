@@ -1,6 +1,7 @@
 package aggregation;
 
 import data.ReadFile;
+
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -35,7 +36,7 @@ public class Threshold extends Aggregation {
         double thresholdCounter;
         boolean repeat = true;
 
-        while (position < textKeys.size() && position < titleKeys.size() && repeat) {
+        while (/*position < textKeys.size() && position < titleKeys.size() && */repeat) {
 
             //STEP 1 : Set the Threshold to be the aggregate of the scores seen in this access
             Integer textDocId = textKeys.get(position);
@@ -44,34 +45,40 @@ public class Threshold extends Aggregation {
             double titleScore = title.get(titleDocId) * 2.;
             thresholdCounter = textScore + titleScore;
             double tempScore;
+
             //STEP 2 : Do random accesses and compute the score of the objects seen
             if (textDocId != titleDocId) {
                 // check if title ranking contains the current docId of text ranking
                 if (title.containsKey(textDocId)) {
                     tempScore = text.get(textDocId) + (title.get(textDocId) * 2.);
-                } else
+                    tempResult.put(textDocId, tempScore);
+
+                } else {
                     tempScore = text.get(textDocId);
-                tempResult.put(textDocId, tempScore);
+                    tempResult.put(textDocId, tempScore);
+
+                }
                 // check if text ranking contains the current docId of title ranking
                 if (text.containsKey(titleDocId)) {
                     tempScore = (title.get(titleDocId) * 2) + text.get(titleDocId);
                     tempResult.put(titleDocId, tempScore);
                 } else {
-                    tempScore = title.get(titleDocId);
+                    tempScore = title.get(titleDocId) * 2.;
                     tempResult.put(titleDocId, tempScore);
                 }
 
-                List<Double> scores = super.getSortedListOfValues(tempResult);
-                ordered = super.orderMap(k, tempResult, scores);
-                if (isThresholdExceeded(ordered, thresholdCounter))
-                    repeat = false;
             }
             //same rank for the current docID
             else {
                 tempScore = textScore + titleScore;
                 tempResult.put(textDocId, tempScore);
             }
+            List<Double> scores = super.getSortedListOfValues(tempResult);
+            ordered = super.orderMap(k, tempResult, scores);
             position++;
+            if (isThresholdExceeded(ordered, thresholdCounter))
+                repeat = false;
+
         }
         return ordered;
     }
@@ -79,7 +86,7 @@ public class Threshold extends Aggregation {
     private boolean isThresholdExceeded(Map<Integer, Double> ordered, double thresholdCounter) {
         boolean thresholdPassed = true;
         for (double score : ordered.values()) {
-            if (score < thresholdCounter)
+            if (score <= thresholdCounter)
                 thresholdPassed = false;
         }
         return thresholdPassed;

@@ -53,7 +53,6 @@ public class RPrecision {
         }
     }
 
-
     /**
      * Computes the R-precision for all the queries in the file passed as parameter, compared with the Ground Truth
      * performance results.

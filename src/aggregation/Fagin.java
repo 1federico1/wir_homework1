@@ -32,7 +32,7 @@ public class Fagin extends Aggregation{
         int found = 0;
         int position = 0;
 
-        while (found < k && position < textDocIds.size() && position < titleDocIds.size()) {
+        while (found <= k && position < textDocIds.size() && position < titleDocIds.size()) {
             //current element of the text ranking
             int textDocId = textDocIds.get(position);
             //the current value was seen previously
@@ -75,7 +75,8 @@ public class Fagin extends Aggregation{
             }
             //the current docId was seen in title
             else if (titleSeen.containsKey(docId)) {
-                double titleScore = titleSeen.get(docId) * 2.;
+                /*Already multiplied by 2*/
+                double titleScore = titleSeen.get(docId);
                 double textScore = 0.;
                 //text ranking may not contain the current document
                 if (text.containsKey(docId))
