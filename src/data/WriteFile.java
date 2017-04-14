@@ -28,8 +28,8 @@ public class WriteFile {
                 for(Integer docId : docId2Score.keySet()) {
                     String line;
                     line = queryId.toString();
-                    line = line + "\t"+rank.toString();
                     line = line +"\t" + docId.toString();
+                    line = line + "\t"+rank.toString();
                     line = line + "\t" + docId2Score.get(docId);
                     pw.println(line);
                     rank++;

@@ -1,8 +1,12 @@
 import aggregation.Fagin;
 import aggregation.Threshold;
+import data.ReadFile;
 import data.WriteFile;
 import performance.NMDCG;
 import performance.RPrecision;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by federico on 4/1/17.
@@ -18,13 +22,16 @@ public class Main {
         System.out.println("RPRECISION");
         RPrecision rp = new RPrecision();
         rp.computeValuesForAllTheStemmers();
-        System.out.println("FAGIN");
         Fagin f = new Fagin();
-        System.out.println("THRESHOLD");
         Threshold t = new Threshold();
         WriteFile wf = new WriteFile();
         wf.writeFile(pathToResults+"/fagin.tsv", f.compute());
         wf.writeFile(pathToResults+"/threshold.tsv",t.compute());
+        Map<Integer, List<Integer>> fagin = ReadFile.getInstance().getQueryIdRetrievedDocuments(pathToResults+"/fagin.tsv");
+        System.out.println("FAGIN = " + rp.averageRPrecision(fagin));
+        Map<Integer, List<Integer>> threshold = ReadFile.getInstance().getQueryIdRetrievedDocuments(pathToResults+"/threshold.tsv");
+        System.out.println("THRESHOLD = " + rp.averageRPrecision(threshold));
+
 
     }
 }
