@@ -13,7 +13,7 @@ import java.util.Map;
  */
 public class Main {
 
-    private static final String pathToResults = "/home/federico/Dropbox/intellij/wir_homework1/results";
+    private static final String pathToResults = "/home/alessandro/Scrivania/Uni/WIR/HW1/Cranfield_DATASET/Cranfield_DATASET/results";
 
     public static void main(String[] args) {
         System.out.println("NMDCG");
