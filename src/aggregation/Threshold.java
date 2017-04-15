@@ -35,7 +35,7 @@ public class Threshold extends Aggregation {
         double thresholdCounter;
         boolean repeat = true;
 
-        while (repeat && position < textKeys.size() && position < titleKeys.size() ) {
+        while (position < textKeys.size() && position < titleKeys.size() && repeat) {
 
             //STEP 1 : Set the Threshold to be the aggregate of the scores seen in this access
             Integer textDocId = textKeys.get(position);
@@ -90,11 +90,9 @@ public class Threshold extends Aggregation {
     private boolean isThresholdExceeded(Map<Integer, Double> ordered, double thresholdCounter) {
         boolean thresholdPassed = true;
         for (double score : ordered.values()) {
-            System.out.println("score: "+score);
-                if (score < thresholdCounter)
-                    thresholdPassed = false;
-            }
-
+            if (score < thresholdCounter)
+                thresholdPassed = false;
+        }
         return thresholdPassed;
     }
 

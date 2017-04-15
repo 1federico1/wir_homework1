@@ -76,7 +76,7 @@ public class Fagin extends Aggregation{
             }
             //the current docId was seen in title
             else if (titleSeen.containsKey(docId)) {
-                double titleScore = titleSeen.get(docId);
+                double titleScore = titleSeen.get(docId) * 2.;
                 double textScore = 0.;
                 //text ranking may not contain the current document
                 if (text.containsKey(docId))
