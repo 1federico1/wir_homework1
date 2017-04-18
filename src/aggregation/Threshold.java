@@ -31,6 +31,7 @@ public class Threshold extends Aggregation {
         Map<Integer, Double> ordered = new LinkedHashMap<>();
         Map<Integer, Double> tempResult = new LinkedHashMap<>();
 
+
         int position = 0;
         double thresholdCounter;
         boolean repeat = true;
