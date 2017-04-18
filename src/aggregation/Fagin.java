@@ -10,15 +10,12 @@ import java.util.Map;
  */
 public class Fagin extends Aggregation {
 
-    public Fagin() {
-    }
-
     @Override
     public Map<Integer, Double> aggregateSingleQuery(int queryId) {
         //k is set as the number of relevant document for the given query
-        int k = this.groundTruth.get(queryId).size();
-        Map<Integer, Double> text = this.rf.getBm25StopwordTextRanking().get(queryId);
-        Map<Integer, Double> title = this.rf.getBm25StopwordTitleRanking().get(queryId);
+        int k = super.getGroundTruth().get(queryId).size();
+        Map<Integer, Double> text = super.getReadFileInstance().getBm25StopwordTextRanking().get(queryId);
+        Map<Integer, Double> title = super.getReadFileInstance().getBm25StopwordTitleRanking().get(queryId);
         List<Integer> textDocIds = new LinkedList<>(text.keySet());
         List<Integer> titleDocIds = new LinkedList<>(title.keySet());
         //contains values seen once
@@ -31,7 +28,7 @@ public class Fagin extends Aggregation {
         int found = 0;
         int position = 0;
 
-        while (found <= k && position < textDocIds.size() && position < titleDocIds.size() ) {
+        while (found <= k && position < textDocIds.size() && position < titleDocIds.size()) {
             //current element of the text ranking
             int textDocId = textDocIds.get(position);
             //the current value was seen previously

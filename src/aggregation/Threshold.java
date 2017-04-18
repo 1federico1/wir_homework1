@@ -1,7 +1,5 @@
 package aggregation;
 
-import data.ReadFile;
-
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -12,20 +10,11 @@ import java.util.Map;
  */
 public class Threshold extends Aggregation {
 
-
-    private ReadFile rf;
-    private Map<Integer, List<Integer>> groundTruth;
-
-    public Threshold() {
-        this.rf = new ReadFile();
-        this.groundTruth = this.rf.getGroundTruth();
-    }
-
     @Override
     public Map<Integer, Double> aggregateSingleQuery(int queryId) {
-        int k = this.groundTruth.get(queryId).size();
-        Map<Integer, Double> text = this.rf.getBm25StopwordTextRanking().get(queryId);
-        Map<Integer, Double> title = this.rf.getBm25StopwordTitleRanking().get(queryId);
+        int k = super.getGroundTruth().get(queryId).size();
+        Map<Integer, Double> text = super.getReadFileInstance().getBm25StopwordTextRanking().get(queryId);
+        Map<Integer, Double> title = super.getReadFileInstance().getBm25StopwordTitleRanking().get(queryId);
         List<Integer> textKeys = new LinkedList<>(text.keySet());
         List<Integer> titleKeys = new LinkedList<>(title.keySet());
         Map<Integer, Double> ordered = new LinkedHashMap<>();
