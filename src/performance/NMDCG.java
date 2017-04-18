@@ -13,7 +13,7 @@ import static data.ReadFile.getPathStopwordStemmer;
 import static data.Utility.*;
 
 /**
- * Created by federico on 4/3/17.
+ * NMDCG
  */
 public class NMDCG {
     private ReadFile rf;
@@ -22,8 +22,15 @@ public class NMDCG {
         this.rf = ReadFile.getInstance();
     }
 
+
+    /**
+     * Computes the NMDCG for a single query result, compared with the Ground Truth (relevant documents) results
+     * @param map
+     * @param queryId
+     * @param k
+     * @return
+     */
     public double computeSingleQuery(Map<Integer, List<Integer>> map, int queryId, int k) {
-        /*Nel caso in cui groundTruth restituisca un numero di documenti inferiore a k*/
         int cut = Math.min(k, this.rf.getGroundTruth().get(queryId).size());
         List<Integer> relevantDocuments = this.rf.getGroundTruth().get(queryId);
         List<Integer> retrievedDocuments = map.get(queryId);
@@ -43,6 +50,11 @@ public class NMDCG {
         return mdcg / maximumMdcg;
     }
 
+    /**
+     *
+     * @param cut
+     * @return
+     */
     private double getMaximumMdcg(int cut) {
         double maximumMdcg = 1.;
         for (int j = 2; j <= cut; j++) {
@@ -52,6 +64,11 @@ public class NMDCG {
         return maximumMdcg;
     }
 
+    /**
+     *
+     * @param k
+     * @return
+     */
     private Map<String, Double> computeSingleKForAllFiles(int k) {
         Map<Integer, Double> queryId2nmdcg = new HashMap<>();
         Map<String, Double> results = new LinkedHashMap<>();

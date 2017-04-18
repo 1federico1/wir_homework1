@@ -75,7 +75,9 @@ public class ReadFile {
     }
 
     /**
-     * Read the file and build a list of arrays, where each of them is a line of the file.
+     * Reads the file and returns a list of arrays, where each of them is a line of the file.
+     * The tsv files are constitued by 4 columns, each of them represents a particular value: Query_ID, Doc_ID, Rank and
+     * Score; to get one of this values is sufficient to access the array at the right index (0,1,2 or 3).
      * @param path
      * @return
      */

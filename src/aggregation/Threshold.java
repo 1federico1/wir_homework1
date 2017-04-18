@@ -22,7 +22,7 @@ public class Threshold extends Aggregation {
     }
 
     @Override
-    public Map<Integer, Double> aggregate(int queryId) {
+    public Map<Integer, Double> aggregateSingleQuery(int queryId) {
         int k = this.groundTruth.get(queryId).size();
         Map<Integer, Double> text = this.rf.getBm25StopwordTextRanking().get(queryId);
         Map<Integer, Double> title = this.rf.getBm25StopwordTitleRanking().get(queryId);
@@ -37,7 +37,7 @@ public class Threshold extends Aggregation {
 
         while (position < textKeys.size() && position < titleKeys.size() && repeat) {
 
-            //STEP 1 : Set the Threshold to be the aggregate of the scores seen in this access
+            //STEP 1 : Set the Threshold to be the aggregateSingleQuery of the scores seen in this access
             Integer textDocId = textKeys.get(position);
             Integer titleDocId = titleKeys.get(position);
             double textScore = text.get(textDocId);
@@ -45,7 +45,7 @@ public class Threshold extends Aggregation {
             thresholdCounter = textScore + titleScore;
             double tempScore;
 
-            //STEP 2 : Do random accesses and compute the score of the objects seen
+            //STEP 2 : Do random accesses and aggregate the score of the objects seen
             if (textDocId != titleDocId) {
                 // check if title ranking contains the current docId of text ranking
                 if (title.containsKey(textDocId)) {
@@ -71,8 +71,7 @@ public class Threshold extends Aggregation {
                 tempResult.put(textDocId, tempScore);
             }
 
-            List<Double> scores = super.getSortedListOfValues(tempResult);
-            ordered = super.orderMap(k, tempResult, scores);
+            ordered = super.orderMap(k, tempResult);
             position++;
 
 

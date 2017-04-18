@@ -25,9 +25,9 @@ public class Main {
         Map<Integer, Map<Integer, Double>> title = rf.getBm25StopwordTitleRanking();
         Fagin f = new Fagin();
         Threshold t = new Threshold();
-        Map<Integer, Double> queryFagin = f.aggregate(1);
+        Map<Integer, Double> queryFagin = f.aggregateSingleQuery(1);
         System.out.println("FAGIN = " + queryFagin);
-        Map<Integer, Double> queryThreshold = t.aggregate(1);
+        Map<Integer, Double> queryThreshold = t.aggregateSingleQuery(1);
         for (int queryId : queryFagin.keySet())
             System.out.println(queryId + " = " + queryFagin.get(queryId));
         System.out.println("THRESHOLD = " + queryThreshold);
@@ -57,8 +57,8 @@ public class Main {
         Fagin f = new Fagin();
         Threshold t = new Threshold();
         WriteFile wf = new WriteFile();
-        wf.writeFile(pathToResults+"/fagin.tsv", f.compute());
-        wf.writeFile(pathToResults+"/threshold.tsv",t.compute());
+        wf.writeFile(pathToResults+"/fagin.tsv", f.aggregate());
+        wf.writeFile(pathToResults+"/threshold.tsv",t.aggregate());
         Map<Integer, List<Integer>> fagin = ReadFile.getInstance().getQueryIdRetrievedDocuments(pathToResults+"/fagin.tsv");
         System.out.println("FAGIN = " + rp.averageRPrecision(fagin));
         Map<Integer, List<Integer>> threshold = ReadFile.getInstance().getQueryIdRetrievedDocuments(pathToResults+"/threshold.tsv");

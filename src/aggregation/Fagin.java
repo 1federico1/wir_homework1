@@ -1,6 +1,5 @@
 package aggregation;
 
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -15,7 +14,7 @@ public class Fagin extends Aggregation {
     }
 
     @Override
-    public Map<Integer, Double> aggregate(int queryId) {
+    public Map<Integer, Double> aggregateSingleQuery(int queryId) {
         //k is set as the number of relevant document for the given query
         int k = this.groundTruth.get(queryId).size();
         Map<Integer, Double> text = this.rf.getBm25StopwordTextRanking().get(queryId);
@@ -83,8 +82,7 @@ public class Fagin extends Aggregation {
                 result.put(docId, textScore + titleScore);
             }
         }
-        List<Double> scores = super.getSortedListOfValues(result);
-        return super.orderMap(k, result, scores);
+        return super.orderMap(k, result);
     }
 
 }

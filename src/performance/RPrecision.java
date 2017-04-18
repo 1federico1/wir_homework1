@@ -11,7 +11,6 @@ import static data.Utility.*;
 /**
  * R-Precision: Requires a set of known relevant documents Rel, from which we calculate the precision of the top Rel
  * documents returned.
- * <p>
  */
 public class RPrecision {
     private ReadFile rf;
@@ -21,7 +20,7 @@ public class RPrecision {
     }
 
     /**
-     * Computes the R-precision for a single performance, compared with the Ground Truth (relevant documents) performance results.
+     * Computes the R-precision for a single query result, compared with the Ground Truth (relevant documents) results.
      *
      * @param queryId
      * @return the value of the R-precision
