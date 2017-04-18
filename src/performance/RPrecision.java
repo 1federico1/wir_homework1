@@ -33,12 +33,10 @@ public class RPrecision {
         /*
         Cutoff the list of returned documents at the position indicated by the size of the relevant documents set.
          */
-       // System.out.println(queryId+" = "+retrievedDocuments+"-"+numberOfRelevantDocuments);
         int min = Math.min(retrievedDocuments.size(), relevantDocuments.size());
         List<Integer> cutOff = new LinkedList();
         for(int i = 1; i <= min; i++)
             cutOff.add(retrievedDocuments.get(i-1));
-        //retrievedDocuments = retrievedDocuments.subList(0, (int)numberOfRelevantDocuments);
         /*
         For each retrieved document check if it is present in the relevant document set
          */

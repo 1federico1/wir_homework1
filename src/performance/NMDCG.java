@@ -24,21 +24,20 @@ public class NMDCG {
 
     public double computeSingleQuery(Map<Integer, List<Integer>> map, int queryId, int k) {
         /*Nel caso in cui groundTruth restituisca un numero di documenti inferiore a k*/
-        /*Giusto come facevo prima*/
         int cut = Math.min(k, this.rf.getGroundTruth().get(queryId).size());
-        List<Integer> relevantDocuments = this.rf.getGroundTruth().get(queryId).subList(0, this.rf.getGroundTruth().get(queryId).size());
+        List<Integer> relevantDocuments = this.rf.getGroundTruth().get(queryId);
         List<Integer> retrievedDocuments = map.get(queryId);
 
         double mdcg = relevance(retrievedDocuments.get(0), relevantDocuments);
         double maximumMdcg = 1.;
-        if (k > 1) {
+        if (cut > 1) {
             int i = 1;
-                while (i < k) {
+                while (i < cut) {
                     double logBaseTwoK = Math.log10(i+1) / Math.log10(2.);
                     mdcg += (relevance(retrievedDocuments.get(i), relevantDocuments) / logBaseTwoK);
                     i++;
                 }
-            maximumMdcg = getMaximumMdcg(k);
+            maximumMdcg = getMaximumMdcg(cut);
         }
 
         return mdcg / maximumMdcg;

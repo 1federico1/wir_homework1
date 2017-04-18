@@ -9,7 +9,7 @@ import java.util.Map;
 /**
  * Created by federico on 4/9/17.
  */
-public class Fagin extends Aggregation{
+public class Fagin extends Aggregation {
 
     public Fagin() {
     }
@@ -25,14 +25,14 @@ public class Fagin extends Aggregation{
         //contains values seen once
         Map<Integer, Double> seen = new LinkedHashMap<>();
         //contains values seen from text ranking
-        Map<Integer, Double> textSeen = new HashMap<>();
+        Map<Integer, Double> textSeen = new LinkedHashMap<>();
         //contains values seen from title ranking
-        Map<Integer, Double> titleSeen = new HashMap<>();
-        Map<Integer, Double> result = new HashMap<>();
+        Map<Integer, Double> titleSeen = new LinkedHashMap<>();
+        Map<Integer, Double> result = new LinkedHashMap<>();
         int found = 0;
         int position = 0;
 
-        while (found < k && position < textDocIds.size() && position < titleDocIds.size() ) {
+        while (found <= k && position < textDocIds.size() && position < titleDocIds.size() ) {
             //current element of the text ranking
             int textDocId = textDocIds.get(position);
             //the current value was seen previously
@@ -40,7 +40,7 @@ public class Fagin extends Aggregation{
             if (seen.containsKey(textDocId)) {
                 found++;
                 double titleScore = title.get(textDocId) * 2.;
-                result.put(textDocId, textScore + titleScore );
+                result.put(textDocId, textScore + titleScore);
                 seen.remove(textDocId);
             } else {
                 seen.put(textDocId, textScore);
@@ -48,7 +48,6 @@ public class Fagin extends Aggregation{
             }
             //current element of the title ranking
             int titleDocId = titleDocIds.get(position);
-
             double titleScore = title.get(titleDocId) * 2.;
             if (seen.containsKey(titleDocId)) {
                 textScore = text.get(titleDocId);
@@ -76,7 +75,7 @@ public class Fagin extends Aggregation{
             }
             //the current docId was seen in title
             else if (titleSeen.containsKey(docId)) {
-                double titleScore = titleSeen.get(docId) * 2.;
+                double titleScore = titleSeen.get(docId);
                 double textScore = 0.;
                 //text ranking may not contain the current document
                 if (text.containsKey(docId))

@@ -15,7 +15,7 @@ import java.util.Set;
  */
 public class Main {
 
-    private static final String pathToResults = "/home/alessandro/Scrivania/Uni/WIR/HW1/Cranfield_DATASET/Cranfield_DATASET/results";
+    private static final String pathToResults = "/home/federico/Dropbox/intellij/wir_homework1/results";
 
     public static void main(String[] args) {
 

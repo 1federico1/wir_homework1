@@ -8,7 +8,6 @@ import java.util.*;
  * Created by federico on 4/13/17.
  */
 public abstract class Aggregation {
-
     ReadFile rf = ReadFile.getInstance();
     Map<Integer, List<Integer>> groundTruth = rf.getGroundTruth();
 
