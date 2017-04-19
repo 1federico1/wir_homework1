@@ -1,6 +1,6 @@
 package aggregation;
 
-import data.ReadFile;
+import data.IO;
 
 import java.util.*;
 
@@ -61,8 +61,8 @@ public abstract class Aggregation {
     }
 
 
-    ReadFile getReadFileInstance() {
-        return ReadFile.getInstance();
+    IO getReadFileInstance() {
+        return IO.getInstance();
     }
 
     Map<Integer, List<Integer>> getGroundTruth() {

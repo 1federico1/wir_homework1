@@ -1,25 +1,25 @@
 package performance;
 
-import data.ReadFile;
+import data.IO;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import static data.ReadFile.getPathDefaultStemmer;
-import static data.ReadFile.getPathEnglishStemmer;
-import static data.ReadFile.getPathStopwordStemmer;
+import static data.IO.getPathDefaultStemmer;
+import static data.IO.getPathEnglishStemmer;
+import static data.IO.getPathStopwordStemmer;
 import static data.Utility.*;
 
 /**
  * NMDCG
  */
 public class NMDCG {
-    private ReadFile rf;
+    private IO rf;
 
     public NMDCG() {
-        this.rf = ReadFile.getInstance();
+        this.rf = IO.getInstance();
     }
 
 

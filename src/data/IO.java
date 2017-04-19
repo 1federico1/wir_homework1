@@ -1,29 +1,23 @@
 package data;
 
-import java.io.BufferedReader;
+import java.io.*;
 
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.*;
 
 /**
  * Created by federico on 4/1/17.
  */
 
-public class ReadFile {
+public class IO {
 
-    private static ReadFile instance = null;
+    private static IO instance = null;
 
-    private static final String PATH_TO_BM25TEXT = "/home/federico/Dropbox/intellij/wir_homework1/" +
-            "Cranfield_DATASET/stopword_stemmer/output_bm25text.tsv";
-    private static final String PATH_TO_BM25TITLE = "/home/federico/Dropbox/intellij/wir_homework1/" +
-            "Cranfield_DATASET/stopword_stemmer/output_bm25title.tsv";
-    private static final String PATH_DEFAULT_STEMMER = "/home/federico/Dropbox/intellij/wir_homework1/" +
-            "Cranfield_DATASET/default/";
-    private static final String PATH_ENGLISH_STEMMER = "/home/federico/Dropbox/intellij/wir_homework1/" +
-            "Cranfield_DATASET/stemmer/";
-    private static final String PATH_STOPWORD_STEMMER = "/home/federico/Dropbox/intellij/wir_homework1/" +
-            "Cranfield_DATASET/stopword_stemmer/";
+    private static final String USER_HOME = System.getProperty("user.home");
+    private static final String PATH_TO_BM25TEXT = USER_HOME + "/hw/stopword_stemmer/output_bm25text.tsv";
+    private static final String PATH_TO_BM25TITLE = USER_HOME + "/hw/stopword_stemmer/output_bm25title.tsv";
+    private static final String PATH_DEFAULT_STEMMER = USER_HOME + "/hw/default_stemmer/";
+    private static final String PATH_ENGLISH_STEMMER = USER_HOME + "/hw/english_stemmer/";
+    private static final String PATH_STOPWORD_STEMMER = USER_HOME + "/hw/stopword_stemmer/";
 
     private Map<Integer, List<Integer>> groundTruth;
 
@@ -37,19 +31,20 @@ public class ReadFile {
 
     private Map<String, Map<Integer, List<Integer>>> files;
 
-    public ReadFile() {
-        this.groundTruth = this.getQueryIdRetrievedDocuments("/home/federico/Dropbox/intellij/wir_homework1/Cranfield_DATASET/default/cran_Ground_Truth.tsv");
+    public IO() {
+        this.groundTruth = this.getQueryIdRetrievedDocuments(USER_HOME + "/Dropbox/intellij/wir_homework1/Cranfield_DATASET/default/cran_Ground_Truth.tsv");
     }
 
-    public static ReadFile getInstance() {
+    public static IO getInstance() {
         if (instance == null)
-            instance = new ReadFile();
+            instance = new IO();
         return instance;
     }
 
     /**
      * Init the data structures (maps) for each stemmer folder, so that it is not necessary to access anymore the files
      * stored in secondary memory
+     *
      * @param path
      */
     public void init(String path) {
@@ -78,6 +73,7 @@ public class ReadFile {
      * Reads the file and returns a list of arrays, where each of them is a line of the file.
      * The tsv files are constitued by 4 columns, each of them represents a particular value: Query_ID, Doc_ID, Rank and
      * Score; to get one of this values is sufficient to access the array at the right index (0,1,2 or 3).
+     *
      * @param path
      * @return
      */
@@ -161,6 +157,38 @@ public class ReadFile {
             list.add(relevantDocId);
             map.put(queryId, list);
         }
+    }
+
+    public void writeFile(String fileName, Map<Integer, Map<Integer, Double>> result) {
+        FileWriter fw = null;
+        PrintWriter pw;
+        File f = new File(fileName);
+        if(f.exists())
+            f.delete();
+        try {
+            fw = new FileWriter(fileName, true);
+            pw = new PrintWriter(fw);
+            pw.println("QUERY\tDOC_ID\tRANK\tSCORE");
+            for (Integer queryId : result.keySet()) {
+                pw = new PrintWriter(fw);
+                Integer rank = 1;
+                Map<Integer, Double> docId2Score = result.get(queryId);
+                for(Integer docId : docId2Score.keySet()) {
+                    String line;
+                    line = queryId.toString();
+                    line = line +"\t" + docId.toString();
+                    line = line + "\t"+rank.toString();
+                    line = line + "\t" + docId2Score.get(docId);
+                    pw.println(line);
+                    rank++;
+                }
+
+            }
+            pw.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
     public Map<Integer, Map<Integer, Double>> getBm25StopwordTextRanking() {

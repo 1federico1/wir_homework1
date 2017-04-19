@@ -1,6 +1,6 @@
 package performance;
 
-import data.ReadFile;
+import data.IO;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -13,10 +13,10 @@ import static data.Utility.*;
  * documents returned.
  */
 public class RPrecision {
-    private ReadFile rf;
+    private IO rf;
 
     public RPrecision() {
-        this.rf = ReadFile.getInstance();
+        this.rf = IO.getInstance();
     }
 
     /**
@@ -81,13 +81,13 @@ public class RPrecision {
 
     public void computeValuesForAllTheStemmers() {
         System.out.println("DEFAULT STEMMER");
-        this.rf.init(ReadFile.getPathDefaultStemmer());
+        this.rf.init(IO.getPathDefaultStemmer());
         computeAll();
         System.out.println("ENGLISH STEMMER");
-        this.rf.init(ReadFile.getPathEnglishStemmer());
+        this.rf.init(IO.getPathEnglishStemmer());
         computeAll();
         System.out.println("STOPWORD STEMMER");
-        this.rf.init(ReadFile.getPathStopwordStemmer());
+        this.rf.init(IO.getPathStopwordStemmer());
         computeAll();
     }
 
