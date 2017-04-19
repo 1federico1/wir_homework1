@@ -50,11 +50,6 @@ public class NMDCG {
         return mdcg / maximumMdcg;
     }
 
-    /**
-     *
-     * @param cut
-     * @return
-     */
     private double getMaximumMdcg(int cut) {
         double maximumMdcg = 1.;
         for (int j = 2; j <= cut; j++) {
@@ -64,11 +59,6 @@ public class NMDCG {
         return maximumMdcg;
     }
 
-    /**
-     *
-     * @param k
-     * @return
-     */
     private Map<String, Double> computeSingleKForAllFiles(int k) {
         Map<Integer, Double> queryId2nmdcg = new HashMap<>();
         Map<String, Double> results = new LinkedHashMap<>();

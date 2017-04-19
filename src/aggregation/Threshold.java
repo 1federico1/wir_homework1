@@ -26,7 +26,7 @@ public class Threshold extends Aggregation {
 
         while (position < textKeys.size() && position < titleKeys.size() && repeat) {
 
-            //STEP 1 : Set the Threshold to be the aggregateSingleQuery of the scores seen in this access
+            //Set the threshold to be the aggregation of the scores seen in this access
             Integer textDocId = textKeys.get(position);
             Integer titleDocId = titleKeys.get(position);
             double textScore = text.get(textDocId);
@@ -34,7 +34,7 @@ public class Threshold extends Aggregation {
             thresholdCounter = textScore + titleScore;
             double tempScore;
 
-            //STEP 2 : Do random accesses and aggregate the score of the objects seen
+            //aggregate scores of already seen documents
             if (textDocId != titleDocId) {
                 // check if title ranking contains the current docId of text ranking
                 if (title.containsKey(textDocId)) {

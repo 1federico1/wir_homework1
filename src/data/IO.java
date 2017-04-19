@@ -32,7 +32,7 @@ public class IO {
     private Map<String, Map<Integer, List<Integer>>> files;
 
     public IO() {
-        this.groundTruth = this.getQueryIdRetrievedDocuments(USER_HOME + "/Dropbox/intellij/wir_homework1/Cranfield_DATASET/default/cran_Ground_Truth.tsv");
+        this.groundTruth = this.getQueryIdRetrievedDocuments(USER_HOME + "/hw/cran_Ground_Truth.tsv");
     }
 
     public static IO getInstance() {
